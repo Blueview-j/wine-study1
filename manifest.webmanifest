@@ -1,0 +1,14 @@
+{
+  "name": "Level 1 Wine Study Room",
+  "short_name": "Wine Study",
+  "description": "Interactive WSET Level 1 Award in Wines study companion with a mock exam.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E8EBEA",
+  "theme_color": "#7A1F3D",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

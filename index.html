@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Level 1 Wine Study Room</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E8EBEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#170E13" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wine Study">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EBEA; --surface:#F8F9F8; --surface-2:#EEF1EF; --ink:#2A1520; --muted:#64525A; --line:#CBD0CD;
+  --claret:#7A1F3D; --on-claret:#FFFFFF; --claret-soft:#F1DDE3;
+  --gold:#85620F; --gold-soft:#F4E7C2; --vine:#3C5A2B; --vine-soft:#DBE7D0;
+  --bad:#A3241C; --bad-soft:#F6DAD6; --track:#D9DDDA;
+  --display:"Bodoni Moda","Bodoni 72","Didot",Georgia,serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#170E13; --surface:#22151C; --surface-2:#2B1C24; --ink:#F2E6EA; --muted:#BCA6B0; --line:#402D37;
+    --claret:#E77D9A; --on-claret:#1C0B12; --claret-soft:#3F1E2C;
+    --gold:#E5C561; --gold-soft:#3A2F14; --vine:#A2C78A; --vine-soft:#22311B;
+    --bad:#FF9C90; --bad-soft:#41191A; --track:#36262F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#170E13; --surface:#22151C; --surface-2:#2B1C24; --ink:#F2E6EA; --muted:#BCA6B0; --line:#402D37;
+  --claret:#E77D9A; --on-claret:#1C0B12; --claret-soft:#3F1E2C;
+  --gold:#E5C561; --gold-soft:#3A2F14; --vine:#A2C78A; --vine-soft:#22311B;
+  --bad:#FF9C90; --bad-soft:#41191A; --track:#36262F;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:var(--claret)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--claret);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.12;margin:0 0 .5em;letter-spacing:-.01em}
+h2{font-size:clamp(2rem,5vw,3rem);font-weight:500}
+h3{font-size:1.45rem;font-weight:600;margin-top:2.2rem}
+h4{font-size:1rem;margin:0 0 .3rem;font-weight:700}
+p{margin:0 0 1rem}
+.lede{font-size:1.15rem;color:var(--muted);max-width:62ch}
+.prose{max-width:68ch}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow:auto;border-right:1px solid var(--line);padding:30px 22px;display:flex;flex-direction:column;gap:20px;background:var(--bg)}
+.brand{font-family:var(--display);font-size:1.5rem;font-weight:600;line-height:1.1;text-decoration:none;color:var(--ink)}
+.brand em{display:block;font-size:.95rem;font-weight:400;color:var(--muted);font-family:var(--body);font-style:normal;margin-top:4px}
+.nav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav a{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;font-size:.98rem}
+.nav a:hover{background:var(--surface-2)}
+.nav a[aria-current="page"]{background:var(--claret);color:var(--on-claret)}
+.nav .n{font-family:var(--display);font-size:1.05rem;text-align:center}
+.nav .st{width:10px;height:10px;border-radius:50%;border:1.5px solid currentColor;opacity:.55}
+.nav .st.done{background:currentColor;opacity:1}
+.nav .exam-best{font-size:.8rem;opacity:.85}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+.main{padding:48px clamp(18px,5vw,72px) 96px;min-width:0}
+.view{max-width:880px}
+.view[hidden]{display:none}
+.topbar{display:none}
+
+@media (max-width: 900px){
+  .app{grid-template-columns:1fr}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+  .topbar .brand{font-size:1.15rem}
+  .side{position:fixed;inset:0;z-index:40;height:auto;transform:translateX(-102%);transition:transform .25s ease;padding-top:calc(env(safe-area-inset-top,0px) + 24px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px);border-right:0}
+  .side.open{transform:none}
+  .main{padding-top:28px}
+}
+.close-menu{display:none}
+@media (max-width:900px){.close-menu{display:inline-flex;align-self:flex-start}}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--claret);background:var(--claret);color:var(--on-claret);font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--claret)}
+.btn.quiet{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.sm{min-height:36px;padding:6px 14px;font-size:.92rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.seg button,.chip{min-height:40px;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500;font-size:.95rem}
+.seg button[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.field{margin-bottom:14px}
+.field>span{display:block;font-weight:600;font-size:.92rem;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:var(--claret);height:32px}
+
+/* ---------- panels ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,3vw,26px);margin:18px 0}
+.panel.tint{background:var(--claret-soft);border-color:transparent}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media (max-width:700px){.split{grid-template-columns:1fr}}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);margin:18px 0}
+.trio>div{padding:20px;border-right:1px solid var(--line)}
+.trio>div:last-child{border-right:0}
+.trio .big{font-family:var(--display);font-size:1.6rem;display:block;margin-bottom:4px}
+@media (max-width:700px){.trio{grid-template-columns:1fr}.trio>div{border-right:0;border-bottom:1px solid var(--line)}.trio>div:last-child{border-bottom:0}}
+.keyline{border-left:3px solid var(--gold);padding:4px 0 4px 16px;margin:18px 0;font-size:1.02rem}
+.keyline strong{color:var(--gold)}
+.table-wrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:30px;align-items:center;margin-bottom:34px}
+.hero h1{font-size:clamp(2.9rem,8vw,5.4rem);font-weight:500;line-height:.98;letter-spacing:-.025em;margin-bottom:.35em}
+.hero h1 span{display:block;font-style:italic;font-weight:400}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.glass-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.glass{width:min(240px,62vw);height:auto;overflow:visible}
+.glass .outline{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.glass .wine{transition:fill .7s ease,transform 1s cubic-bezier(.2,.8,.2,1)}
+.glass .shine{fill:#fff;opacity:.35}
+.swatches{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.swatches button{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 7px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-size:.9rem;min-height:38px}
+.swatches button i{width:20px;height:20px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.15)}
+.swatches button[aria-pressed="true"]{border-color:var(--ink);font-weight:600}
+.glass-caption{text-align:center;min-height:3.2em;max-width:34ch;font-size:.95rem;color:var(--muted)}
+
+/* wine list */
+.winelist{list-style:none;padding:0;margin:10px 0 0}
+.winelist a{display:flex;align-items:baseline;gap:12px;padding:14px 4px;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--line)}
+.winelist a:hover .wl-name b{color:var(--claret)}
+.wl-n{font-family:var(--display);font-size:1.5rem;width:1.6em;flex:none;color:var(--claret)}
+.wl-name{flex:0 1 auto}
+.wl-name b{display:block;font-family:var(--display);font-size:1.3rem;font-weight:600;transition:color .15s}
+.wl-name small{display:block;color:var(--muted);font-size:.9rem}
+.wl-lead{flex:1 1 30px;border-bottom:2px dotted var(--line);transform:translateY(-6px);min-width:20px}
+.wl-meta{flex:none;font-size:.9rem;color:var(--muted);white-space:nowrap}
+.wl-meta.done{color:var(--vine);font-weight:600}
+
+.module-head{margin-bottom:24px}
+.module-head .num{font-family:var(--display);font-style:italic;font-size:1.2rem;color:var(--claret);display:block;margin-bottom:6px}
+
+/* ---------- meters ---------- */
+.meter{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:12px;margin:9px 0;font-size:.95rem}
+.meter .tr{height:12px;border-radius:99px;background:var(--track);overflow:hidden}
+.meter .fl{height:100%;border-radius:99px;background:var(--claret);transition:width .45s ease}
+.meter .fl.gold{background:var(--gold)}
+.meter .fl.vine{background:var(--vine)}
+@media (max-width:520px){.meter{grid-template-columns:110px 1fr}}
+
+/* style finder */
+.result{margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--surface-2);display:flex;gap:16px;align-items:center}
+.result .dot{width:54px;height:54px;flex:none;border-radius:50%;border:2px solid var(--line);transition:background .4s}
+.result b{font-family:var(--display);font-size:1.25rem;display:block}
+
+/* milk */
+.milk{display:flex;gap:10px;align-items:flex-end;margin-top:12px}
+.milk div{flex:1;text-align:center;font-size:.85rem;color:var(--muted)}
+.milk i{display:block;height:64px;border-radius:8px 8px 4px 4px;border:1.5px solid var(--line);margin-bottom:6px;background:var(--surface)}
+.milk div:nth-child(1) i{background:linear-gradient(#fff0,rgba(240,240,255,.6))}
+.milk div:nth-child(2) i{background:linear-gradient(#fff0,rgba(250,248,240,.9))}
+.milk div:nth-child(3) i{background:#FBF7EC}
+.milk div.on{color:var(--ink);font-weight:700}
+.milk div.on i{border-color:var(--claret);border-width:2.5px}
+
+/* grape anatomy */
+.anatomy svg{width:100%;max-width:300px;display:block;margin:auto}
+.anatomy .part{cursor:pointer;transition:opacity .2s}
+.anatomy .part:hover,.anatomy .part.on{filter:brightness(1.15)}
+.anatomy .part.on .hl{stroke:var(--gold);stroke-width:5}
+.anatomy .hl{stroke:transparent;stroke-width:5}
+.part-info h4{font-family:var(--display);font-size:1.4rem;font-weight:600}
+
+/* tank */
+.tank{position:relative;height:220px;border:2px solid var(--ink);border-radius:18px 18px 28px 28px;overflow:hidden;background:var(--surface-2)}
+.tank .juice{position:absolute;inset:auto 0 0;height:78%;background:linear-gradient(180deg,#E9DD95,#D8C25E);transition:background .5s}
+.tank .bub{position:absolute;bottom:-12px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.75);animation:rise 3s linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.9}100%{transform:translateY(-190px);opacity:0}}
+.tank.still .bub{animation-play-state:paused;opacity:0}
+.equation{font-family:var(--display);font-size:clamp(1.15rem,3.4vw,1.6rem);text-align:center;padding:14px;line-height:1.3}
+.equation em{color:var(--claret);font-style:italic}
+
+/* process */
+.proc-steps{list-style:none;padding:0;margin:16px 0 0;counter-reset:s}
+.proc-steps li{position:relative;padding:12px 0 12px 54px;border-bottom:1px solid var(--line)}
+.proc-steps li:last-child{border-bottom:0}
+.proc-steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:10px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:1.2rem;background:var(--proc,var(--gold-soft));color:var(--ink);border:1.5px solid var(--line)}
+.proc-steps b{display:block}
+.temp-tag{display:inline-block;margin-top:4px;font-size:.85rem;font-weight:600;padding:2px 10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
+
+/* grapes */
+.grape-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:16px}
+.gcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.gcard .band{height:8px}
+.gcard .in{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.gcard h4{font-family:var(--display);font-size:1.45rem;font-weight:600;margin:0}
+.gcard .tag{font-style:italic;color:var(--muted);font-family:var(--display)}
+.gcard dl{margin:6px 0 0;display:none;font-size:.93rem}
+.gcard.open dl{display:block}
+.gcard dt{font-weight:700;margin-top:8px}
+.gcard dd{margin:0;color:var(--ink)}
+.gcard .more{align-self:flex-start;margin-top:auto}
+
+.match{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match button{min-height:46px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;font-weight:500}
+.match button.sel{border-color:var(--claret);background:var(--claret-soft)}
+.match button.ok{border-color:var(--vine);background:var(--vine-soft);cursor:default}
+.match button.no{animation:shake .35s;border-color:var(--bad);background:var(--bad-soft)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* thermometer */
+.tscale{position:relative;height:56px;margin:26px 0 10px;border-radius:12px;background:linear-gradient(90deg,#5E8FB7,#9FC1D6 35%,#E6D9B9 65%,#C98A6C);}
+.tscale .band{position:absolute;top:-8px;bottom:-8px;border:3px solid var(--ink);border-radius:10px;background:rgba(255,255,255,.25);transition:left .5s ease,width .5s ease}
+.tticks{position:relative;height:22px;font-size:.78rem;color:var(--muted)}
+.tticks span{position:absolute;transform:translateX(-50%)}
+.temp-read{font-family:var(--display);font-size:2.4rem;line-height:1}
+.temp-list{display:flex;flex-wrap:wrap;gap:8px}
+
+/* order game */
+.order-pool{display:flex;flex-direction:column;gap:8px}
+.order-pool button{text-align:left;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;min-height:44px}
+.order-pool button.placed{border-color:var(--vine);background:var(--vine-soft);cursor:default}
+.order-pool button.placed::before{content:attr(data-pos) ". ";font-weight:700}
+.order-pool button.no{animation:shake .35s;border-color:var(--bad)}
+
+/* food */
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:14px}
+.fx{padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .3s,border-color .3s}
+.fx .ar{font-size:1.25rem;font-weight:700;font-family:var(--display)}
+.fx.up{border-color:var(--bad);background:var(--bad-soft)}
+.fx.down{border-color:var(--vine);background:var(--vine-soft)}
+.fx.up .ar{color:var(--bad)} .fx.down .ar{color:var(--vine)}
+.fx.same{opacity:.55}
+.risk{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:700;font-size:.88rem}
+.risk.hi{background:var(--bad-soft);color:var(--bad)}
+.risk.lo{background:var(--vine-soft);color:var(--vine)}
+.risk.mid{background:var(--gold-soft);color:var(--gold)}
+.gcard[hidden]{display:none}
+
+/* tasting */
+.aroma-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.aroma-groups .grp h4{font-size:.9rem;color:var(--muted);font-weight:600}
+.aroma-groups .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{min-height:36px;padding:5px 12px;font-size:.9rem}
+.note-out{font-family:var(--display);font-size:1.25rem;line-height:1.45;padding:18px 20px;border-radius:12px;background:var(--surface-2);border-left:4px solid var(--claret)}
+
+/* units */
+.units-read{font-family:var(--display);font-size:3.2rem;line-height:1}
+
+/* quiz */
+.check{margin-top:44px;border-top:2px solid var(--ink);padding-top:22px}
+.check-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.check-head h3{margin:0}
+.q{border:0;margin:20px 0;padding:0}
+.q legend{font-weight:600;margin-bottom:10px;padding:0;font-size:1.02rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;min-height:46px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;line-height:1.4}
+.opt .L{font-family:var(--display);font-weight:700;width:1.2em;flex:none}
+.opt:hover:not([disabled]){border-color:var(--claret)}
+.opt.picked{border-color:var(--claret);background:var(--claret-soft)}
+.opt.right{border-color:var(--vine);background:var(--vine-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.exp{margin-top:10px;font-size:.93rem;color:var(--muted)}
+.check-score{font-weight:700;font-size:1.05rem}
+
+/* exam */
+.spec{list-style:none;padding:0;margin:18px 0 26px;max-width:520px}
+.spec li{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.spec li span:nth-child(2){flex:1;border-bottom:2px dotted var(--line);transform:translateY(-5px)}
+.spec li b{font-family:var(--display);font-size:1.2rem}
+.exam-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:18px}
+@media (max-width:900px){.exam-bar{top:calc(env(safe-area-inset-top,0px) + 61px)}}
+.timer{font-family:var(--display);font-size:1.6rem;font-variant-numeric:tabular-nums}
+.timer.warn{color:var(--bad)}
+.qnum{font-family:var(--display);font-style:italic;color:var(--claret);font-size:1.1rem}
+.exam-q h3{font-family:var(--body);font-size:1.25rem;font-weight:600;margin:6px 0 18px;line-height:1.4}
+.exam-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.grid30{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin-top:22px}
+@media (max-width:520px){.grid30{grid-template-columns:repeat(6,1fr)}}
+.grid30 button{aspect-ratio:1;min-height:36px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:.9rem;position:relative}
+.grid30 button.ans{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid30 button.cur{outline:3px solid var(--claret);outline-offset:1px}
+.grid30 button.flag::after{content:"";position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1.5px solid var(--line)}
+.confirm{margin-top:16px}
+.score-big{font-family:var(--display);font-size:clamp(4rem,14vw,7rem);line-height:.9;font-weight:500}
+.verdict{font-family:var(--display);font-size:2rem;font-style:italic}
+.verdict.pass{color:var(--vine)} .verdict.fail{color:var(--bad)}
+.review-item{padding:14px 0;border-bottom:1px solid var(--line)}
+.review-item .yours{font-size:.93rem}
+.tick{font-weight:700}
+.tick.r{color:var(--vine)} .tick.w{color:var(--bad)}
+
+footer.note{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted);max-width:68ch}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home">Wine Study Room</a>
+  <button class="btn quiet sm" id="menuBtn" aria-expanded="false" aria-controls="side">Menu</button>
+</header>
+
+<div class="app">
+  <aside class="side" id="side">
+    <button class="btn quiet sm close-menu" id="closeMenu">Close menu</button>
+    <a class="brand" href="#home">Wine Study Room<em>WSET Level 1 Award in Wines companion</em></a>
+    <nav aria-label="Course">
+      <ul class="nav">
+        <li><a href="#home" data-v="home"><span class="n">~</span><span>Start here</span><span></span></a></li>
+        <li><a href="#styles" data-v="styles"><span class="n">1</span><span>Types &amp; styles</span><span class="st" data-st="styles"></span></a></li>
+        <li><a href="#making" data-v="making"><span class="n">2</span><span>How wine is made</span><span class="st" data-st="making"></span></a></li>
+        <li><a href="#grapes" data-v="grapes"><span class="n">3</span><span>Grapes &amp; wines</span><span class="st" data-st="grapes"></span></a></li>
+        <li><a href="#serving" data-v="serving"><span class="n">4</span><span>Storing &amp; serving</span><span class="st" data-st="serving"></span></a></li>
+        <li><a href="#food" data-v="food"><span class="n">5</span><span>Food &amp; wine</span><span class="st" data-st="food"></span></a></li>
+        <li><a href="#tasting" data-v="tasting"><span class="n">6</span><span>Tasting wine</span><span class="st" data-st="tasting"></span></a></li>
+        <li><a href="#alcohol" data-v="alcohol"><span class="n">7</span><span>Alcohol &amp; health</span><span class="st" data-st="alcohol"></span></a></li>
+        <li><a href="#exam" data-v="exam"><span class="n">✦</span><span>Mock exam</span><span class="exam-best" id="navBest"></span></a></li>
+      </ul>
+    </nav>
+    <div class="side-foot">
+      <button class="btn quiet sm" id="themeBtn">Switch to dark</button>
+      <button class="btn quiet sm" id="resetBtn">Reset progress</button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+
+<!-- ================= HOME ================= -->
+<section class="view" id="v-home">
+  <div class="hero">
+    <div>
+      <h1>From grape <span>to glass</span></h1>
+      <p class="lede">A complete, hands-on companion to the WSET Level 1 Award in Wines. Work through seven short modules, try every interactive, then sit a timed 30-question mock exam built to the real format.</p>
+      <p><a class="btn" href="#styles">Begin module 1</a> &nbsp; <a class="btn ghost" href="#exam">Go to the exam</a></p>
+    </div>
+    <div class="glass-wrap">
+      <svg class="glass" viewBox="0 0 200 300" role="img" aria-label="Wine glass showing the selected wine colour">
+        <defs>
+          <clipPath id="bowlClip"><path d="M44 24 C40 118 62 156 100 160 C138 156 160 118 156 24 Z"/></clipPath>
+        </defs>
+        <g clip-path="url(#bowlClip)">
+          <g class="wine" id="wineG" style="transform:translateY(100px)">
+            <rect x="30" y="78" width="140" height="100" id="wineRect" style="fill:#8E1730"/>
+            <ellipse cx="100" cy="78" rx="56" ry="6" id="wineTop" style="fill:#8E1730;filter:brightness(1.25)"/>
+          </g>
+          <path class="shine" d="M58 40 C56 90 64 120 78 138 C66 116 62 86 64 40 Z"/>
+        </g>
+        <path class="outline" d="M44 24 C40 118 62 156 100 160 C138 156 160 118 156 24"/>
+        <path class="outline" d="M100 160 L100 262"/>
+        <ellipse class="outline" cx="100" cy="266" rx="46" ry="7"/>
+      </svg>
+      <div class="swatches" id="swatches" role="group" aria-label="Wine colours"></div>
+      <p class="glass-caption" id="glassCap" aria-live="polite">Tap a colour to pour. Level 1 only asks for white, rosé or red; these six shades give you a head start on Level 2.</p>
+    </div>
+  </div>
+
+  <h2>The course</h2>
+  <p class="prose muted">Each module ends with a short self-check. Finish a check and the module is marked done here and in the menu.</p>
+  <ol class="winelist">
+    <li><a href="#styles"><span class="wl-n">1</span><span class="wl-name"><b>Types and styles of wine</b><small>Still, sparkling, fortified; colour, sweetness, body</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="styles">15 min</span></a></li>
+    <li><a href="#making"><span class="wl-n">2</span><span class="wl-name"><b>How wine is made</b><small>The grape, climate, fermentation, winemaking</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="making">30 min</span></a></li>
+    <li><a href="#grapes"><span class="wl-n">3</span><span class="wl-name"><b>Grapes and classic wines</b><small>The eight key grapes, plus the named wines you need to know</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="grapes">30 min</span></a></li>
+    <li><a href="#serving"><span class="wl-n">4</span><span class="wl-name"><b>Storing and serving</b><small>Temperatures, glasses, opening, faults</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="serving">20 min</span></a></li>
+    <li><a href="#food"><span class="wl-n">5</span><span class="wl-name"><b>Food and wine</b><small>How seven food components change a wine</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="food">20 min</span></a></li>
+    <li><a href="#tasting"><span class="wl-n">6</span><span class="wl-name"><b>Tasting wine</b><small>Look, smell, taste, and write a note</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="tasting">15 min</span></a></li>
+    <li><a href="#alcohol"><span class="wl-n">7</span><span class="wl-name"><b>Alcohol and health</b><small>Moderation, guidelines and units</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="alcohol">10 min</span></a></li>
+    <li><a href="#exam"><span class="wl-n">✦</span><span class="wl-name"><b>Mock exam</b><small>30 questions, 45 minutes, pass at 70%</small></span><span class="wl-lead"></span><span class="wl-meta" data-meta="exam">45 min</span></a></li>
+  </ol>
+</section>
+
+<!-- ================= 1 STYLES ================= -->
+<section class="view" id="v-styles" hidden>
+  <div class="module-head"><span class="num">Module 1</span><h2>Types and styles of wine</h2>
+  <p class="lede">Wine is an alcoholic drink made by fermenting grape juice. Every wine can be described by its type, its colour, how sweet it is and how heavy it feels.</p></div>
+
+  <h3>Three types of wine</h3>
+  <div class="trio">
+    <div><span class="big">Still</span><p class="small">The majority of wine. No bubbles; 8–15% alcohol, mostly 11.5–14%. Often named after the region (Sancerre, Burgundy, Rioja, Chianti) or the grape (Pinot Grigio).</p><p class="small muted">Chablis, Rioja, Sancerre</p></div>
+    <div><span class="big">Sparkling</span><p class="small">Bubbles of carbon dioxide are trapped in the wine, usually during a second fermentation in a sealed tank or bottle. They are released when the bottle is opened.</p><p class="small muted">Champagne, Prosecco, Cava</p></div>
+    <div><span class="big">Fortified</span><p class="small">A grape spirit is added during or after fermentation, raising the alcohol to around 15–22%. Some are sweet, some are dry.</p><p class="small muted">Port, Sherry</p></div>
+  </div>
+
+  <h3>Colour</h3>
+  <p class="prose">Wines are <strong>white</strong>, <strong>rosé</strong> or <strong>red</strong>. White wines are usually made from white grapes. Red wines are made from black grapes, and the colour comes from the skins. Rosé is made from black grapes that start fermenting with their skins but are drained off them after a short time, so it picks up only a little colour.</p>
+
+  <h3>Sweetness</h3>
+  <p class="prose">Sweetness comes from grape sugar left in the wine after fermentation. Level 1 uses three words: <strong>dry</strong>, <strong>medium</strong> and <strong>sweet</strong>. Most wines are <strong>dry</strong>: the yeast have turned all the sugar into alcohol. A <strong>medium</strong> wine (usually white or rosé) is made by removing the yeast before all the sugar is used, or by adding unfermented grape juice to a dry wine. A <strong>sweet</strong> wine is made from grapes so high in sugar that the yeast stop before eating it all, or, for fortified wines, by adding high-strength spirit that kills the yeast. Sweet wines need high acidity so they don’t taste cloying.</p>
+  <div class="keyline"><strong>Watch out:</strong> “dry” means not sweet. A wine that makes your gums feel rough has high tannin, which is a different thing.</div>
+
+  <h3>Body</h3>
+  <p class="prose">Body is how heavy or rich a wine feels in your mouth: <strong>light</strong>, <strong>medium</strong> or <strong>full</strong>. Think of the difference between skimmed, semi-skimmed and whole milk. Alcohol is the biggest contributor, helped by sugar, tannin and intense flavour.</p>
+
+  <h3>Structure, aromas and flavours</h3>
+  <p class="prose">Alongside colour, Level 1 describes a wine by five structural characteristics, plus its aromas and flavours. A wine’s <strong>style</strong> is simply the combination of all of these.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Characteristic</th><th>What you notice</th><th>Where it comes from</th></tr>
+    <tr><td>Sweetness</td><td>Sweetness on the tip of the tongue</td><td>Grape sugar left after fermentation</td></tr>
+    <tr><td>Acidity</td><td>A tangy, mouth-watering freshness</td><td>The grape; higher in cool climates</td></tr>
+    <tr><td>Tannin</td><td>A drying, grippy feel on the gums</td><td>Black grape skins, so mainly reds; also oak</td></tr>
+    <tr><td>Alcohol</td><td>Warmth in the mouth and throat</td><td>Fermentation of sugar; riper grapes give more</td></tr>
+    <tr><td>Body</td><td>Overall weight in the mouth</td><td>Mostly alcohol, plus sugar, tannin and flavour</td></tr>
+    <tr><td>Aromas and flavours</td><td>Fruit; oak (vanilla, smoke, cedar, cloves, coconut); and other notes such as grass, flowers, herbs, earth, mushroom or leather</td><td>The grape, the climate and the winemaking</td></tr>
+  </table></div>
+  <p class="prose small"><strong>Examples to remember.</strong> High acidity: Chablis, Chianti, Sauvignon Blanc, Riesling, Cabernet Sauvignon, Pinot Noir. High tannin: red Bordeaux, Chianti; low tannin: Beaujolais, some Pinot Noir. High alcohol: Châteauneuf-du-Pape; low alcohol: White Zinfandel. Light body: Pinot Grigio, Beaujolais; medium: Sancerre, Côtes du Rhône; full: Californian Cabernet Sauvignon, Sauternes.</p>
+
+  <div class="panel">
+    <h4>Style finder</h4>
+    <p class="small muted">Pick a colour, sweetness and body to see the classic wine that fits.</p>
+    <div class="field"><span>Colour</span><div class="seg" data-sf="c"><button data-v="white" aria-pressed="true">White</button><button data-v="rose">Rosé</button><button data-v="red">Red</button></div></div>
+    <div class="field"><span>Sweetness</span><div class="seg" data-sf="s"><button data-v="0" aria-pressed="true">Dry</button><button data-v="1">Medium</button><button data-v="2">Sweet</button></div></div>
+    <div class="field"><span>Body</span><div class="seg" data-sf="b"><button data-v="0" aria-pressed="true">Light</button><button data-v="1">Medium</button><button data-v="2">Full</button></div></div>
+    <div class="milk" id="milk"><div class="on"><i></i>Skimmed</div><div><i></i>Semi-skimmed</div><div><i></i>Whole milk</div></div>
+    <div class="result"><span class="dot" id="sfDot"></span><div><b id="sfName"></b><span class="small" id="sfDesc"></span></div></div>
+  </div>
+
+  <div class="check" data-topic="styles"></div>
+</section>
+
+<!-- ================= 2 MAKING ================= -->
+<section class="view" id="v-making" hidden>
+  <div class="module-head"><span class="num">Module 2</span><h2>How wine is made</h2>
+  <p class="lede">Almost everything you taste in a glass starts in the grape. The vineyard decides the raw material; the winemaker decides what to do with it.</p></div>
+
+  <h3>Inside a grape</h3>
+  <div class="panel split anatomy">
+    <svg viewBox="0 0 240 250" role="group" aria-label="Cross-section of a grape. Select a part.">
+      <g class="part" data-part="stem" tabindex="0" role="button" aria-label="Stem">
+        <path class="hl" d="M120 8 L120 66 M120 30 L92 14" fill="none" stroke-linecap="round"/>
+        <path d="M120 8 L120 66 M120 30 L92 14" stroke="#6E5236" stroke-width="9" fill="none" stroke-linecap="round"/>
+      </g>
+      <g class="part" data-part="skin" tabindex="0" role="button" aria-label="Skin">
+        <circle class="hl" cx="120" cy="150" r="88" fill="none"/>
+        <circle cx="120" cy="150" r="86" fill="#4B1F4A"/>
+      </g>
+      <g class="part" data-part="pulp" tabindex="0" role="button" aria-label="Pulp">
+        <circle class="hl" cx="120" cy="150" r="72" fill="none"/>
+        <circle cx="120" cy="150" r="72" fill="#D7DE9C"/>
+        <circle cx="96" cy="124" r="22" fill="#fff" opacity=".25"/>
+      </g>
+      <g class="part" data-part="seeds" tabindex="0" role="button" aria-label="Seeds">
+        <ellipse class="hl" cx="100" cy="162" rx="12" ry="19" fill="none"/>
+        <ellipse class="hl" cx="140" cy="162" rx="12" ry="19" fill="none"/>
+        <ellipse cx="100" cy="162" rx="11" ry="18" fill="#B98A4A" transform="rotate(-12 100 162)"/>
+        <ellipse cx="140" cy="162" rx="11" ry="18" fill="#B98A4A" transform="rotate(12 140 162)"/>
+      </g>
+    </svg>
+    <div class="part-info" id="partInfo" aria-live="polite"></div>
+  </div>
+
+  <h3>The vine’s year</h3>
+  <div class="panel"><div class="seg" id="cycleBtns"></div><p id="cycleInfo" style="margin:14px 0 0" aria-live="polite"></p></div>
+
+  <h3>Growing the grape</h3>
+  <p class="prose">Every year a vine <strong>flowers in spring</strong>. Each flower becomes a small, hard, green grape, and through summer the grapes <strong>ripen</strong>: they swell with water, <strong>sugar rises, acidity falls</strong> and flavours become riper. White grapes turn from green to golden; black grapes turn from green to purple. Grapes are picked in late summer. (The sugar is made in the leaves from sunlight, a process called photosynthesis.)</p>
+  <h3>Where grapes grow</h3>
+  <p class="prose">Vines need the right amount of sunlight, heat and water, and a winter cold enough for them to rest. Most vineyards lie between about 30° and 50° north and south of the Equator. <strong>Cool climates</strong>, nearer the poles (such as Germany and northern France), have lower temperatures and weaker sunlight, and grapes can struggle to ripen; white grapes are commonly grown. <strong>Warm climates</strong>, nearer the Equator (such as parts of Australia and California), have higher temperatures and more intense sunlight, and grapes ripen consistently; black grapes are common. The colder it is, the lower the sugar and the higher the acidity; the warmer it is, the higher the sugar, the lower the acidity and the riper the flavours.</p>
+  <p class="prose">How warm the climate is controls how ripe the grapes get. Move the slider to see what happens.</p>
+  <div class="panel">
+    <div class="field"><span>Climate: <span id="climLabel">Cool</span></span>
+      <input type="range" id="clim" min="0" max="100" value="15" aria-label="Climate from cool to hot"></div>
+    <div class="meter"><span>Acidity</span><div class="tr"><div class="fl vine" id="mAcid"></div></div></div>
+    <div class="meter"><span>Sugar → alcohol</span><div class="tr"><div class="fl gold" id="mSugar"></div></div></div>
+    <div class="meter"><span>Body</span><div class="tr"><div class="fl" id="mBody"></div></div></div>
+    <div class="meter"><span>Colour (reds)</span><div class="tr"><div class="fl" id="mCol"></div></div></div>
+    <div class="split" style="margin-top:14px">
+      <div><h4>White grapes taste of</h4><p id="climWhite" class="small"></p></div>
+      <div><h4>Black grapes taste of</h4><p id="climRed" class="small"></p></div>
+    </div>
+    <p class="small muted" id="climPlaces"></p>
+  </div>
+
+  <h3>Fermentation</h3>
+  <p class="prose">Fermentation turns grape juice into wine. <strong>Yeast</strong> feeds on the sugar in the juice and turns it into <strong>alcohol</strong> and <strong>carbon dioxide</strong>. It also creates new flavours. Fermentation finishes when all the sugar is used up, giving a dry wine, or the winemaker can stop it early to leave some sweetness.</p>
+  <div class="equation">Sugar + <em>yeast</em> → Alcohol + Carbon dioxide</div>
+  <div class="panel split">
+    <div class="tank" id="tank">
+      <div class="juice" id="juice"></div>
+    </div>
+    <div>
+      <div class="field"><span>Fermentation progress: <span id="fermPct">0%</span></span>
+        <input type="range" id="ferm" min="0" max="100" value="0" aria-label="Fermentation progress"></div>
+      <div class="meter"><span>Sugar left</span><div class="tr"><div class="fl gold" id="fSugar"></div></div></div>
+      <div class="meter"><span>Alcohol</span><div class="tr"><div class="fl" id="fAlc"></div></div></div>
+      <p id="fermOut" class="small" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <h3>Making white, rosé and red wine</h3>
+  <div class="seg" id="procTabs"><button data-p="white" aria-pressed="true">White</button><button data-p="rose">Rosé</button><button data-p="red">Red</button></div>
+  <div class="panel" style="margin-top:12px">
+    <p id="procIntro" class="small muted" style="margin:0"></p>
+    <ol class="proc-steps" id="procSteps"></ol>
+  </div>
+  <div class="keyline"><strong>The big difference:</strong> white wines are pressed <em>before</em> fermentation, so only the juice ferments. Red wines ferment <em>with their skins</em>, then are drained and pressed <em>after</em> fermentation. That is where red wine gets its colour and tannin. Rosé starts fermenting with its skins too, but is drained off them early, so it takes only a little colour.</div>
+
+  <h3>Maturation: steel or oak?</h3>
+  <div class="split">
+    <div class="panel"><h4>Stainless steel</h4><p class="small">Airtight and neutral. Keeps the fresh, fruity flavours of the grape. Most light whites and rosés are made and stored this way and bottled young.</p></div>
+    <div class="panel"><h4>Oak barrels</h4><p class="small">Add flavours such as <strong>vanilla, smoke, cedar, cloves and coconut</strong>, especially when the barrels are new. They also let tiny amounts of oxygen in, softening reds. Oak chips or staves are a cheaper way to give oak flavour.</p></div>
+  </div>
+
+  <h3>Sweet, sparkling and fortified wines</h3>
+  <p class="prose">Fermentation normally runs until the yeast have eaten all the sugar, giving a dry wine. To keep sweetness, the yeast are removed early or unfermented grape juice is added (medium wines), or the grapes are so sugary that the yeast give up (sweet wines). <strong>Fortified wines</strong> have high-strength spirit added, raising alcohol to 15–22%; in sweet styles such as Port, the spirit kills the yeast before they have eaten all the sugar. The detail of how sparkling and fortified wines are made is covered at Level 2.</p>
+
+  <div class="check" data-topic="making"></div>
+</section>
+
+<!-- ================= 3 GRAPES ================= -->
+<section class="view" id="v-grapes" hidden>
+  <div class="module-head"><span class="num">Module 3</span><h2>Grapes and classic wines</h2>
+  <p class="lede">Level 1 focuses on four white and four black grape varieties. Learn what each tastes like, the climate it prefers and the famous places it grows. Then meet the named wines every Level 1 student should recognise.</p></div>
+
+  <div class="seg" id="gFilter"><button data-f="all" aria-pressed="true">All eight</button><button data-f="white">White grapes</button><button data-f="black">Black grapes</button></div>
+  <div class="grape-grid" id="grapeGrid"></div>
+
+  <h3>Place and grape</h3>
+  <p class="prose">Many European wines are named after the place, not the grape. Tap a place, then tap the grape it is made from.</p>
+  <div class="panel">
+    <div class="match"><div class="match-col" id="mPlaces"></div><div class="match-col" id="mGrapes"></div></div>
+    <p class="small" id="matchMsg" aria-live="polite" style="margin-top:12px"></p>
+    <button class="btn quiet sm" id="matchReset">Shuffle and play again</button>
+  </div>
+
+  <h3>Named wines to know</h3>
+  <p class="prose">Many famous wines are known by name rather than grape. Level 1 expects you to recognise these, know their type and describe their style. Apart from Champagne, Burgundy and Bordeaux, they are not made from the principal grapes, so their grapes are background only.</p>
+  <div class="seg" id="oFilter"><button data-f="all" aria-pressed="true">All</button><button data-f="sparkling">Sparkling</button><button data-f="white">White</button><button data-f="rose">Rosé</button><button data-f="red">Red</button><button data-f="fortified">Fortified</button></div>
+  <div class="grape-grid" id="otherGrid"></div>
+
+  <div class="check" data-topic="grapes,other"></div>
+</section>
+
+<!-- ================= 4 SERVING ================= -->
+<section class="view" id="v-serving" hidden>
+  <div class="module-head"><span class="num">Module 4</span><h2>Storing and serving wine</h2>
+  <p class="lede">A good wine can be spoilt by poor storage or the wrong temperature. Most wines are made to drink young, so storage is about keeping them in good condition, not ageing them.</p></div>
+
+  <h3>Storing wine</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Rule</th><th>Why</th></tr>
+    <tr><td>Keep it cool and at a constant temperature</td><td>Heat cooks the fruit flavours; temperature swings push and pull the cork.</td></tr>
+    <tr><td>Keep it in the dark</td><td>Strong light, especially sunlight, damages wine.</td></tr>
+    <tr><td>Lay cork-sealed bottles on their side</td><td>Keeps the cork moist. A dry cork shrinks and lets air in, which spoils the wine. Screwcaps can stand up.</td></tr>
+    <tr><td>Avoid vibration and strong smells</td><td>Both can affect the wine over time.</td></tr>
+  </table></div>
+
+  <h3>Serving temperatures</h3>
+  <p class="prose">Serving too warm makes the alcohol obvious and the wine taste flabby. Serving too cold hides the flavour, and in reds makes the tannins taste harsher and more bitter. Level 1 uses four descriptions: <strong>well chilled</strong>, <strong>chilled</strong>, <strong>lightly chilled</strong> and <strong>room temperature</strong>. Learn the description for each style; the numbers are a guide.</p>
+  <div class="panel">
+    <div class="temp-list seg" id="tempBtns"></div>
+    <div class="tscale" id="tscale"><div class="band" id="tband"></div></div>
+    <div class="tticks" id="tticks"></div>
+    <div class="split" style="margin-top:12px;align-items:center">
+      <div><span class="temp-read" id="tRead"></span><p class="small muted" id="tLab" style="margin-top:6px"></p></div>
+      <p class="small" id="tEx"></p>
+    </div>
+  </div>
+  <p class="prose small muted">To keep wine cold at the table, use an insulated container or an ice bucket filled with ice <em>and</em> cold water; ice alone works less well. Never warm a red by a radiator, which damages its flavours: let it warm up naturally in the room where it will be served. These are recommendations only; if a guest prefers a different temperature, respect it.</p>
+
+  <h3>Glasses</h3>
+  <div class="trio">
+    <div><span class="big">White &amp; rosé</span><p class="small">Medium-sized glass, filled about halfway, to keep the wine cool and fresh.</p></div>
+    <div><span class="big">Red</span><p class="small">Larger bowl, filled up to the widest point, so aromas can gather.</p></div>
+    <div><span class="big">Sparkling</span><p class="small">Tall flute, about two-thirds full, to show off the bubbles and keep them longer.</p></div>
+  </div>
+  <p class="prose small">The best glasses have a bowl that narrows at the rim, which concentrates the aromas. Red wine glasses are usually slightly larger than white, and sparkling wine goes in a flute. Glasses must be completely clean and polished before use: dirt, finger marks or detergent residue can spoil a wine.</p>
+
+  <h3>Opening a bottle</h3>
+  <p class="prose"><strong>Still wine with a cork:</strong> remove the top of the capsule with a capsule remover or a waiter’s friend and clean the neck with a cloth. Centre the corkscrew in the middle of the cork, screw it in and draw the cork out gently, then wipe round the inside and outside of the neck. <strong>Sparkling wine</strong> is under high pressure, and even chilled, the cork can fly out and injure someone. From the moment you loosen the wire cage, keep the cork in your hand. Put these steps in the right order.</p>
+  <div class="panel">
+    <div class="order-pool" id="orderPool"></div>
+    <p class="small" id="orderMsg" aria-live="polite" style="margin-top:12px"></p>
+    <button class="btn quiet sm" id="orderReset">Shuffle and try again</button>
+  </div>
+
+  <h3>Keeping an opened bottle</h3>
+  <p class="prose">Once opened, wine slowly goes stale as it reacts with air. Re-cork it and keep it in the fridge. For longer, keep the air away: a <strong>vacuum system</strong> uses a pump to remove air from the bottle, and a <strong>blanket system</strong> pumps in a gas that pushes the air out without harming the wine.</p>
+
+  <h3>Checking the wine before serving</h3>
+  <p class="prose">Before pouring, check the wine. <strong>Look:</strong> haziness could mean a fault, and there should be no bits floating in it. <strong>Smell:</strong> it should not smell stale, or of wet cardboard or vinegar.</p>
+  <div class="split">
+    <div class="panel"><h4>Cork taint</h4><p class="small">Smells musty, like wet cardboard or a damp cellar, and the fruit is dull. Caused by a contaminated cork. It is harmless but unpleasant, and the bottle should be returned.</p></div>
+    <div class="panel"><h4>Stale or vinegary</h4><p class="small">From too much air, heat or light. The wine loses its fruity character and may smell stale or of vinegar.</p></div>
+  </div>
+
+  <div class="check" data-topic="serving"></div>
+</section>
+
+<!-- ================= 5 FOOD ================= -->
+<section class="view" id="v-food" hidden>
+  <div class="module-head"><span class="num">Module 5</span><h2>Food and wine</h2>
+  <p class="lede">Food changes how a wine tastes far more than wine changes food. The Level 1 course looks at seven things in food: sweetness, umami, acidity, salt, chilli heat, fat and flavour intensity.</p></div>
+
+  <div class="panel">
+    <h4>Choose a food component</h4>
+    <div class="seg" id="fxBtns"></div>
+    <p id="fxDesc" class="small" style="margin:14px 0 0"></p>
+    <div class="fx-grid" id="fxGrid"></div>
+    <p class="small" id="fxTip" style="margin-top:14px"></p>
+    <p class="small muted" style="margin:0">Green: the change usually helps the wine. Red: it usually makes the wine taste harsher or thinner.</p>
+  </div>
+
+  <h3>High risk and low risk</h3>
+  <div class="split">
+    <div class="panel"><span class="risk hi">High risk</span><h4 style="margin-top:10px">Sweetness and umami</h4><p class="small">These make a wine taste <em>harder</em>: more drying, more bitter, more acidic and less fruity.</p></div>
+    <div class="panel"><span class="risk lo">Low risk</span><h4 style="margin-top:10px">Salt and acid</h4><p class="small">These make a wine taste <em>softer</em>: smoother, fruitier and less acidic. They usually improve the match.</p></div>
+  </div>
+
+  <p class="prose small">Chilli heat, fat and flavour intensity are about balance. Chilli makes alcohol more noticeable (and alcohol makes the chilli hotter), fat makes a wine seem less acidic, and highly flavoured food can overwhelm a wine.</p>
+
+  <h3>Rules worth remembering</h3>
+  <div class="table-wrap"><table>
+    <tr><th>If the food is…</th><th>Choose a wine that is…</th></tr>
+    <tr><td>Sweet (desserts)</td><td>At least as sweet as the food, otherwise the wine tastes thin and sour.</td></tr>
+    <tr><td>High in acid (lemon, tomato, vinaigrette)</td><td>High in acidity, otherwise the wine tastes flat and flabby.</td></tr>
+    <tr><td>Umami-rich (mushrooms, ripe cheese, cured meat)</td><td>Fruity and not too tannic; adding salt or a squeeze of lemon to the dish helps.</td></tr>
+    <tr><td>Spicy with chilli</td><td>Low in alcohol, since chilli makes alcohol more noticeable. A medium-sweet German Riesling at 9% is a good choice.</td></tr>
+    <tr><td>Salty</td><td>Most wines work; salt softens tannin and acidity. Try high-acid or sweet wines with salty food.</td></tr>
+    <tr><td>Fatty or oily (cream sauces, fried food, rich meat)</td><td>High in acidity to cut through the richness. Fat and protein also make tannic reds feel softer.</td></tr>
+    <tr><td>Intensely flavoured</td><td>Equally intense, so neither overpowers the other. Delicate food needs a delicate wine.</td></tr>
+  </table></div>
+  <p class="prose"><strong>Personal preference comes first.</strong> When recommending a wine, the most important thing is what that person likes. A textbook match is pointless if they don’t enjoy that style of wine. The rules simply show what most people would want to avoid.</p>
+
+  <h3>Pairing practice</h3>
+  <p class="prose">Pick a dish and a wine to see how the food will change it.</p>
+  <div class="panel">
+    <div class="field"><span>Dish</span><div class="seg" id="pDish"></div></div>
+    <p class="small muted" id="pDishNote"></p>
+    <div class="field"><span>Wine</span><div class="seg" id="pWine"></div></div>
+    <div class="result" style="display:block"><b id="pVerdict"></b><ul id="pWhy" class="small" style="margin:8px 0 0;padding-left:20px"></ul></div>
+    <p style="margin:14px 0 0"><button class="btn quiet sm" id="pBest">Show the best matches</button></p>
+    <p class="small" id="pBestOut" aria-live="polite" style="margin-top:8px"></p>
+  </div>
+
+  <div class="check" data-topic="food"></div>
+</section>
+
+<!-- ================= 6 TASTING ================= -->
+<section class="view" id="v-tasting" hidden>
+  <div class="module-head"><span class="num">Module 6</span><h2>Tasting wine</h2>
+  <p class="lede">Tasting is a skill, and like any skill it gets better with a method. Look, smell, then taste, and describe each in the same words every time.</p></div>
+
+  <h3>Before you start</h3>
+  <p class="prose">Make sure there are no distracting smells, you have a white surface to judge the colour, a glass with a wide bowl that narrows towards the top to concentrate the aromas, and a clean palate with no lingering flavours such as toothpaste or coffee. Fill the glass about one-third full; water and plain crackers refresh the palate between wines.</p>
+
+  <div class="keyline"><strong>The Level 1 tasting approach:</strong> appearance (colour: white, rosé or red), nose (aromas of fruit, oak and other), and palate (sweetness, acidity, tannin, alcohol and body, plus flavours of fruit, oak and other).</div>
+
+  <h3>Look</h3>
+  <p class="prose">At Level 1 you only need to say whether a wine is <strong>white</strong>, <strong>rosé</strong> or <strong>red</strong>. For a head start on Level 2, tilt the glass against white and note the shade. Whites are <strong>lemon</strong> or <strong>gold</strong>; rosés are <strong>pink</strong>; reds are <strong>purple</strong>, <strong>ruby</strong> or <strong>garnet</strong>. Young reds tend to be purple; older reds move towards garnet. Whites get deeper in colour with age or oak.</p>
+
+  <h3>Smell</h3>
+  <p class="prose">Swirl the glass to release aromas, then take short sniffs. Group what you find: fruit first, then anything else such as flowers, herbs, spice or oak.</p>
+
+  <h3>Taste</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Feature</th><th>How to spot it</th><th>Words</th></tr>
+    <tr><td>Sweetness</td><td>Felt on the tip of the tongue, straight away.</td><td>Dry, medium, sweet</td></tr>
+    <tr><td>Acidity</td><td>Makes your mouth water; the more saliva, the higher the acidity.</td><td>Low, medium, high</td></tr>
+    <tr><td>Tannin</td><td>Dries and grips the gums and teeth, like strong black tea. Mainly in reds.</td><td>Low, medium, high</td></tr>
+    <tr><td>Alcohol</td><td>A warming feeling in the mouth and the back of the throat after swallowing.</td><td>Low, medium, high</td></tr>
+    <tr><td>Body</td><td>The weight of the wine in your mouth. Alcohol adds the most.</td><td>Light, medium, full</td></tr>
+    <tr><td>Flavours</td><td>What you tasted; often the same as what you smelt.</td><td>Fruit, floral, spice, oak…</td></tr>
+  </table></div>
+
+  <h3>Write a tasting note</h3>
+  <div class="panel" id="noteBuilder">
+    <div class="field"><span>Colour</span><div class="seg" data-tn="col"></div></div>
+    <div class="field"><span>Aromas and flavours</span>
+      <div class="aroma-groups" id="aromaGroups"></div></div>
+    <div class="field"><span>Sweetness</span><div class="seg" data-tn="sw"></div></div>
+    <div class="field"><span>Acidity</span><div class="seg" data-tn="ac"></div></div>
+    <div class="field" id="tanField"><span>Tannin</span><div class="seg" data-tn="tn"></div></div>
+    <div class="field"><span>Alcohol</span><div class="seg" data-tn="al"></div></div>
+    <div class="field"><span>Body</span><div class="seg" data-tn="bd"></div></div>
+    <p class="note-out" id="noteOut" aria-live="polite"></p>
+    <p class="small muted" id="noteGuess"></p>
+  </div>
+
+  <div class="check" data-topic="tasting"></div>
+</section>
+
+<!-- ================= 7 ALCOHOL ================= -->
+<section class="view" id="v-alcohol" hidden>
+  <div class="module-head"><span class="num">Module 7</span><h2>Alcohol and health</h2>
+  <p class="lede">Enjoying wine responsibly means knowing how much alcohol you are drinking. The official workbook covers this briefly: in moderation alcohol is not regarded as harmful, but too much affects behaviour and both short- and long-term health, and it can be addictive. Low-risk guidelines vary from country to country. UK units are included here as useful background.</p></div>
+
+  <p class="prose">One UK unit is 10 ml of pure alcohol. To work out the units in a drink, multiply the alcohol percentage (ABV) by the volume in millilitres, then divide by 1,000.</p>
+  <div class="equation">Units = ABV % × volume (ml) ÷ 1,000</div>
+  <div class="panel split">
+    <div>
+      <div class="field"><span>Alcohol: <span id="abvOut">13</span>%</span><input type="range" id="abv" min="5" max="22" step="0.5" value="13" aria-label="Alcohol by volume"></div>
+      <div class="field"><span>Serving</span><div class="seg" id="volBtns"><button data-ml="125">125 ml glass</button><button data-ml="175" aria-pressed="true">175 ml glass</button><button data-ml="250">250 ml glass</button><button data-ml="750">750 ml bottle</button></div></div>
+    </div>
+    <div><span class="units-read" id="unitsOut"></span><p class="small muted" id="unitsNote" style="margin-top:8px"></p></div>
+  </div>
+
+  <h3>Guidelines</h3>
+  <p class="prose">The UK Chief Medical Officers advise that, to keep health risks low, men and women should not regularly drink more than <strong>14 units a week</strong>. If you drink that much, spread it evenly over <strong>three or more days</strong> and have several drink-free days. Guidelines differ between countries, so check the advice where you live.</p>
+  <div class="trio">
+    <div><span class="big">Driving</span><p class="small">Alcohol slows reactions and impairs judgement. The safest choice is not to drink at all if you are driving.</p></div>
+    <div><span class="big">Pregnancy</span><p class="small">The safest approach is not to drink alcohol at all.</p></div>
+    <div><span class="big">Pace</span><p class="small">Eat when you drink, alternate with water, and know that alcohol leaves the body slowly.</p></div>
+  </div>
+  <p class="prose">Drinking too much over time raises the risk of serious harm, including liver disease, some cancers and heart problems, and it can affect relationships and work.</p>
+
+  <div class="check" data-topic="alcohol"></div>
+</section>
+
+<!-- ================= EXAM ================= -->
+<section class="view" id="v-exam" hidden>
+  <div id="examIntro">
+    <div class="module-head"><span class="num">Final assessment</span><h2>Mock exam</h2>
+    <p class="lede">This mirrors the format of the WSET Level 1 Award in Wines exam: multiple choice, closed book, against the clock. Each attempt draws from a bank of over 100 questions, weighted like the real paper: 6 on grape growing and winemaking, 18 on types, grapes and named wines, and 6 on storage, service and food.</p></div>
+    <ul class="spec">
+      <li><span>Questions</span><span></span><b>30</b></li>
+      <li><span>Format</span><span></span><b>Multiple choice, one correct answer</b></li>
+      <li><span>Time allowed</span><span></span><b>45 minutes</b></li>
+      <li><span>Pass mark</span><span></span><b>70% (21 correct)</b></li>
+    </ul>
+    <p class="prose small muted">There is one correct answer per question and no penalty for wrong answers, so answer every one. You can flag questions and come back to them. The exam submits itself when time runs out.</p>
+    <p><button class="btn" id="startExam">Start the exam</button></p>
+    <p class="small muted" id="examHistory"></p>
+  </div>
+
+  <div id="examRun" hidden>
+    <div class="exam-bar">
+      <span class="qnum" id="qCounter"></span>
+      <span class="timer" id="timer" aria-live="off">45:00</span>
+      <button class="btn sm" id="submitBtn">Finish</button>
+    </div>
+    <div class="exam-q" id="examQ"></div>
+    <div class="exam-nav">
+      <button class="btn quiet" id="prevQ">Previous</button>
+      <button class="btn quiet" id="flagQ" aria-pressed="false">Flag for review</button>
+      <button class="btn" id="nextQ">Next</button>
+    </div>
+    <div class="confirm panel tint" id="confirmBox" hidden>
+      <p id="confirmText" style="margin-bottom:12px"></p>
+      <button class="btn" id="confirmYes">Submit answers</button>
+      <button class="btn ghost" id="confirmNo">Keep working</button>
+    </div>
+    <div class="grid30" id="grid30" aria-label="Question navigator"></div>
+    <div class="legend"><span><i style="background:var(--ink);border-color:var(--ink)"></i>Answered</span><span><i style="background:var(--gold);border-radius:50%;border:0"></i>Flagged</span><span><i></i>Not answered</span></div>
+  </div>
+
+  <div id="examResult" hidden></div>
+</section>
+
+<footer class="note">An independent study aid for the WSET Level 1 Award in Wines. It is not produced or endorsed by the Wine &amp; Spirit Education Trust, and the mock exam is not made of real exam questions. Always study from your official course materials.</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+const savedTheme=store.get("w1-theme",null);
+if(savedTheme) root.setAttribute("data-theme",savedTheme);
+const isDark=()=>root.dataset.theme==="dark"||(!root.dataset.theme&&matchMedia("(prefers-color-scheme: dark)").matches);
+const themeBtn=$("#themeBtn");
+const syncTheme=()=>{themeBtn.textContent=isDark()?"Switch to light":"Switch to dark"};
+themeBtn.onclick=()=>{const t=isDark()?"light":"dark";root.setAttribute("data-theme",t);store.set("w1-theme",t);syncTheme()};
+syncTheme();
+
+/* ---------- progress ---------- */
+let progress=store.get("w1-progress",{});
+let examHist=store.get("w1-exams",[]);
+function paintProgress(){
+  $$("[data-st]").forEach(el=>el.classList.toggle("done",!!progress[el.dataset.st]));
+  $$("[data-meta]").forEach(el=>{
+    const k=el.dataset.meta;
+    if(k==="exam"){const b=bestExam();if(b!==null){el.textContent="Best "+b+"/30";el.classList.toggle("done",b>=21)}return}
+    if(progress[k]){el.textContent="Done, "+progress[k]+"/4";el.classList.add("done")}
+  });
+  const b=bestExam(); $("#navBest").textContent=b===null?"":b+"/30";
+}
+function bestExam(){return examHist.length?Math.max(...examHist.map(e=>e.score)):null}
+$("#resetBtn").onclick=()=>{if(!confirmReset())return;progress={};examHist=[];store.set("w1-progress",progress);store.set("w1-exams",examHist);location.reload()};
+function confirmReset(){return window.confirm("Clear your module checks and exam history on this device?")}
+
+/* ---------- router ---------- */
+const VIEWS=["home","styles","making","grapes","serving","food","tasting","alcohol","exam"];
+const side=$("#side"),menuBtn=$("#menuBtn");
+function setMenu(o){side.classList.toggle("open",o);menuBtn.setAttribute("aria-expanded",o)}
+menuBtn.onclick=()=>setMenu(true);$("#closeMenu").onclick=()=>setMenu(false);
+function route(){
+  const h=location.hash.slice(1);const v=VIEWS.includes(h)?h:"home";
+  $$(".view").forEach(s=>s.hidden=s.id!=="v-"+v);
+  $$(".nav a").forEach(a=>a.dataset.v===v?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  setMenu(false);window.scrollTo(0,0);
+}
+addEventListener("hashchange",route);
+
+/* ---------- hero glass ---------- */
+const COLOURS=[
+ {n:"Lemon",c:"#E6D57A",t:"Lemon: the colour of most young white wines."},
+ {n:"Gold",c:"#D4A43A",t:"Gold: a deeper white, from age, oak or sweet styles."},
+ {n:"Pink",c:"#E79AA2",t:"Pink: rosé, from a short time on black grape skins."},
+ {n:"Purple",c:"#5A1546",t:"Purple: typical of young red wines."},
+ {n:"Ruby",c:"#8E1730",t:"Ruby: the classic red, a little older or lighter."},
+ {n:"Garnet",c:"#7B2F24",t:"Garnet: an older red, edging towards brick."}];
+const sw=$("#swatches");
+sw.innerHTML=COLOURS.map((c,i)=>`<button data-i="${i}" aria-pressed="false"><i style="background:${c.c}"></i>${c.n}</button>`).join("");
+function pour(i){
+  const c=COLOURS[i];
+  $("#wineRect").style.fill=c.c;$("#wineTop").style.fill=c.c;$("#wineG").style.transform="translateY(0)";
+  $$("button",sw).forEach(b=>b.setAttribute("aria-pressed",b.dataset.i==i));$("#glassCap").textContent=c.t;
+}
+sw.onclick=e=>{const b=e.target.closest("button");if(b)pour(+b.dataset.i)};
+setTimeout(()=>{$("#wineG").style.transform="translateY(0)"},350);
+
+/* ---------- segmented helper ---------- */
+function seg(el,cb){el.addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!el.contains(b))return;$$("button",el).forEach(x=>x.setAttribute("aria-pressed",x===b));cb(b)})}
+const segVal=el=>{const b=$('button[aria-pressed="true"]',el);return b?b.dataset.v:null};
+
+/* ---------- style finder ---------- */
+const STYLES=[
+ ["white",0,0,"Italian Pinot Grigio","Dry and light, with pear and lemon and medium to high acidity.","#E6D57A"],
+ ["white",0,0,"Chablis","Unoaked Chardonnay: light to medium body, high acidity, green apple and lemon.","#E6D57A"],
+ ["white",0,1,"Sancerre","Sauvignon Blanc: medium body, high acidity, green apple and grass.","#E3D77E"],
+ ["white",0,1,"White Burgundy","Chardonnay: medium body, lemon and peach, sometimes vanilla from oak.","#DDBB55"],
+ ["white",0,2,"Oaked Californian Chardonnay","Full body, ripe tropical fruit and vanilla from oak.","#D4A43A"],
+ ["white",1,0,"German Riesling","Medium sweet and light, with peach and citrus balanced by high acidity.","#E0C866"],
+ ["white",2,2,"Sauternes","Sweet and full-bodied: apricot, honey and vanilla, with balancing high acidity.","#C9922E"],
+ ["rose",0,0,"Dry rosé","Pale pink, dry and light, with delicate red fruit.","#F0B8B5"],
+ ["rose",1,0,"White Zinfandel","Californian rosé: medium sweet, low alcohol, strawberry and raspberry.","#EA9EA6"],
+ ["red",0,0,"Beaujolais","Dry, light and unoaked: raspberry, red cherry, low tannin.","#7A1A45"],
+ ["red",0,0,"Red Burgundy","Pinot Noir: light to medium body, high acidity, low to medium tannin, red cherry and raspberry.","#8E1730"],
+ ["red",0,1,"Côtes du Rhône","Dry, medium body: strawberry, red plum and white pepper.","#7A1A3A"],
+ ["red",0,1,"Chianti","Dry, medium body, high tannin and acidity: red cherry, red plum and dried herbs.","#7E1A2E"],
+ ["red",0,1,"Chilean Merlot","Soft and fruity: black plum and blackberry, medium tannin.","#7A1840"],
+ ["red",0,2,"Rioja","Medium to full body: strawberry with vanilla from oak.","#7A2033"],
+ ["red",0,2,"Châteauneuf-du-Pape","Full body, high alcohol: strawberry and cloves from oak.","#5E1530"],
+ ["red",0,2,"Californian Cabernet Sauvignon","Full body, high tannin: blackcurrant and cedar.","#4E1238"],
+ ["red",0,2,"Australian Shiraz","Full body: jammy black cherry and liquorice.","#5A1546"],
+ ["red",2,2,"Port","Fortified, sweet and full-bodied: blackberry, high tannin and high alcohol.","#5A1530"]];
+const sfC=$('[data-sf="c"]'),sfS=$('[data-sf="s"]'),sfB=$('[data-sf="b"]');
+const SW=["dry","medium","sweet"],BD=["light","medium","full"];
+function styleFind(){
+  const c=segVal(sfC),s=+segVal(sfS),b=+segVal(sfB);
+  $$("#milk div").forEach((d,i)=>d.classList.toggle("on",i===b));
+  const pool=STYLES.filter(x=>x[0]===c);
+  const exact=pool.filter(x=>x[1]===s&&x[2]===b);
+  let pick,closest=false;
+  if(exact.length)pick=exact[Math.floor(Math.random()*exact.length)];
+  else{closest=true;pick=pool.slice().sort((p,q)=>(Math.abs(p[1]-s)*1.3+Math.abs(p[2]-b))-(Math.abs(q[1]-s)*1.3+Math.abs(q[2]-b)))[0]}
+  $("#sfDot").style.background=pick[5];$("#sfName").textContent=pick[3];
+  $("#sfDesc").textContent=(closest?"Closest classic example. A "+SW[s]+", "+BD[b]+"-bodied "+(c==="rose"?"rosé":c)+" is unusual. ":"")+pick[4];
+}
+[sfC,sfS,sfB].forEach(el=>seg(el,styleFind));styleFind();
+
+/* ---------- grape anatomy ---------- */
+const PARTS={
+ skin:["Skin","Holds the colour, most of the tannin and many of the aroma and flavour compounds. Black grapes have coloured skins; that is why red wine must ferment with the skins. Thick skins (Cabernet Sauvignon) give deep colour and high tannin; thin skins (Pinot Noir) give pale colour and low tannin."],
+ pulp:["Pulp","The juicy flesh: water, sugar and acid. The juice of almost all grapes, black or white, is colourless. Sugar becomes alcohol during fermentation; acid gives the wine its refreshing quality."],
+ seeds:["Seeds (pips)","Contain bitter tannins and oils. Winemakers crush grapes gently so the seeds are not broken."],
+ stem:["Stem","Woody and high in tannin, which can taste bitter and green. Stems are usually removed before fermentation."]};
+function showPart(k){$$(".anatomy .part").forEach(p=>p.classList.toggle("on",p.dataset.part===k));$("#partInfo").innerHTML=`<h4>${PARTS[k][0]}</h4><p class="small">${PARTS[k][1]}</p>`}
+$$(".anatomy .part").forEach(p=>{p.addEventListener("click",e=>{e.stopPropagation();showPart(p.dataset.part)});p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showPart(p.dataset.part)}})});
+showPart("skin");
+
+/* ---------- climate ---------- */
+const clim=$("#clim");
+function climate(){
+  const t=clim.value/100;
+  const band=t<.34?0:t<.67?1:2;
+  $("#climLabel").textContent=["Cool","Moderate","Warm to hot"][band];
+  $("#mAcid").style.width=(92-62*t)+"%";$("#mSugar").style.width=(28+66*t)+"%";$("#mBody").style.width=(25+68*t)+"%";$("#mCol").style.width=(30+65*t)+"%";
+  $("#climWhite").textContent=["Green fruit (apple, pear) and citrus (lemon, lime). Crisp and light.","Stone fruit (peach, apricot) with riper citrus.","Tropical fruit (pineapple, banana, mango). Rich, fuller and higher in alcohol."][band];
+  $("#climRed").textContent=["Red fruit (cranberry, red cherry, raspberry). Pale colour, light body.","Red and black cherry, plum. Medium body, ripe tannins.","Black fruit (blackberry, blackcurrant), even jammy. Deep colour, full body."][band];
+  $("#climPlaces").textContent="Typical places: "+["Chablis, Champagne, the Mosel, New Zealand.","Bordeaux, much of Italy, cooler parts of Chile.","Barossa Valley, Napa Valley, inland Spain."][band];
+}
+clim.oninput=climate;climate();
+
+/* ---------- vine cycle ---------- */
+const CYCLE=[["Winter","The vine rests. A cold enough winter matters: vines grow best where they get this rest. Growers prune them at this time."],["Spring","Buds burst, shoots and leaves grow, and the vine flowers."],["Flowering","A cluster of tiny flowers forms in spring, and each individual flower will become a grape. Just after flowering, all grapes are small, hard and green."],["Ripening","Through summer the grapes swell with water, sugar rises, acidity falls and flavours get riper. White grapes turn golden, black grapes purple."],["Harvest","Ripe grapes are picked in late summer (in the southern hemisphere, around February to April)."]];
+const cyc=$("#cycleBtns");cyc.innerHTML=CYCLE.map((c,i)=>`<button data-i="${i}" aria-pressed="${i===2}">${c[0]}</button>`).join("");
+const cycShow=i=>{$("#cycleInfo").innerHTML=`<strong>${CYCLE[i][0]}.</strong> ${CYCLE[i][1]}`};
+seg(cyc,b=>cycShow(+b.dataset.i));cycShow(2);
+
+/* ---------- fermentation ---------- */
+const tank=$("#tank");
+for(let i=0;i<14;i++){const b=document.createElement("span");b.className="bub";b.style.left=(6+Math.random()*86)+"%";b.style.animationDelay=(Math.random()*3)+"s";b.style.animationDuration=(2.2+Math.random()*2)+"s";tank.appendChild(b)}
+const ferm=$("#ferm");
+function fermUpd(){
+  const p=+ferm.value;const sugar=Math.round(210*(1-p/100));const alc=(12.5*p/100);
+  $("#fermPct").textContent=p+"%";$("#fSugar").style.width=(100-p)+"%";$("#fAlc").style.width=(p)+"%";
+  tank.classList.toggle("still",p===0||p===100);
+  const t=p/100;$("#juice").style.background=`linear-gradient(180deg, hsl(52 ${62-30*t}% ${74-8*t}%), hsl(48 ${58-20*t}% ${60-6*t}%))`;
+  let style;
+  if(sugar>45)style="Sweet";else if(sugar>4)style="Medium";else style="Dry";
+  $("#fermOut").innerHTML=p===0?"Unfermented grape juice: very sweet, no alcohol. Drag the slider to start the yeast working.":`About <strong>${sugar} g/L</strong> of sugar left and <strong>${alc.toFixed(1)}% alcohol</strong>. If the winemaker stopped fermentation now, the wine would be <strong>${style.toLowerCase()}</strong>${p===100?". All the sugar is used up: this is a dry wine.":"."}`;
+}
+ferm.oninput=fermUpd;fermUpd();
+
+/* ---------- process ---------- */
+const PROC={
+ white:{intro:"White grapes, and occasionally black grapes with colourless juice.",tint:"var(--gold-soft)",steps:[
+  ["Crush","Grapes are crushed gently to break the skins and release juice. Stems are usually removed.",""],
+  ["Press","The juice is separated from the skins straight away, so very little colour or tannin is taken in.",""],
+  ["Ferment the juice","Only the juice ferments, at cool temperatures to keep fresh, fruity aromas.",""],
+  ["Mature","Stainless steel keeps fresh fruit flavours; oak barrels add vanilla, toast and smoke. Most whites are matured only briefly.",""],
+  ["Bottle","Most white wines are bottled young and drunk within a year or two.",""]]},
+ rose:{intro:"Black grapes. Fermentation starts with the skins, but the juice is drained off them early.",tint:"var(--claret-soft)",steps:[
+  ["Crush","Black grapes are crushed to release their colourless juice.",""],
+  ["Ferment with the skins","Juice and skins start fermenting together for only a few hours, so the juice picks up just a little colour and almost no tannin.",""],
+  ["Drain","Once the colour is right, the pink juice is drained off the skins. It finishes fermenting on its own at cool temperatures, like a white wine, to keep fresh red-fruit aromas.",""],
+  ["Mature","Usually brief, in stainless steel, to keep the wine fresh and fruity.",""],
+  ["Bottle","Usually bottled young and drunk while fresh.",""]]},
+ red:{intro:"Black grapes. The skins stay with the juice throughout fermentation.",tint:"var(--claret-soft)",steps:[
+  ["Crush","Black grapes are crushed and usually destemmed.",""],
+  ["Ferment with the skins","Juice and skins ferment together at warmer temperatures to extract colour and tannin. The cap of skins that floats up is mixed back in.",""],
+  ["Drain","After fermentation the free-run wine is drained off the skins.",""],
+  ["Press","The remaining skins are pressed to release the wine still in them, which may be blended back in.",""],
+  ["Mature","Often in oak barrels, which soften the wine and add vanilla, toast and spice. Some reds age for years.",""],
+  ["Bottle","Lighter reds are drunk young; fuller, tannic reds can improve in bottle.",""]]}};
+const procTabs=$("#procTabs");
+function proc(k){const p=PROC[k];$("#procIntro").textContent=p.intro;const ol=$("#procSteps");ol.style.setProperty("--proc",p.tint);
+  ol.innerHTML=p.steps.map(s=>`<li><b>${s[0]}</b><span class="small">${s[1]}</span>${s[2]?`<br><span class="temp-tag">${s[2]}</span>`:""}</li>`).join("")}
+seg(procTabs,b=>proc(b.dataset.p));proc("white");
+
+/* ---------- grapes ---------- */
+const GRAPES=[
+ {n:"Chardonnay",c:"white",tag:"Many styles, from lean to rich",band:"#E6D57A",
+  climate:"Cool and warm climates; the climate shapes its style.",aroma:"Cool: green apple, lemon. Warm: peach, pineapple, banana. Oak adds vanilla.",
+  style:"Dry. Cool climate: high acidity, light to medium body. Warm climate: medium acidity, medium to full body. Often oaked.",
+  where:"Chablis (coolest part of Burgundy, unoaked) and white Burgundy, France; Champagne, blended with Pinot Noir; Australia; California."},
+ {n:"Sauvignon Blanc",c:"white",tag:"Pronounced, green and zesty",band:"#DEDB8C",
+  climate:"Cool to moderate.",aroma:"Green apple, grapefruit, passion fruit; herbaceous asparagus, green bell pepper and grass.",
+  style:"Dry, high acidity, light to medium body. Usually fermented in stainless steel and not oaked, to keep its aromas.",
+  where:"Sancerre (Loire, France); New Zealand, especially Marlborough."},
+ {n:"Pinot Grigio",c:"white",tag:"Light, simple and refreshing",band:"#E2CF8E",
+  climate:"Cool to moderate.",aroma:"Pear and lemon.",
+  style:"Typically dry, light body, medium to high acidity. Stainless steel, not oaked, to keep the fruit.",
+  where:"Mainly Italy, also grown in other countries."},
+ {n:"Riesling",c:"white",tag:"High acidity, any sweetness",band:"#E9DE82",
+  climate:"Cool.",aroma:"Floral, green apple, lime, lemon, peach, apricot. Pronounced aromas.",
+  style:"Dry, medium or sweet, but always high acidity, which balances any sweetness. Light to medium body. Usually stainless steel, not oaked.",
+  where:"Germany, from dry to sweet; Alsace (France) and Australia, dry."},
+ {n:"Cabernet Sauvignon",c:"black",tag:"Black fruit and firm tannin",band:"#4E1238",
+  climate:"Warm; thick skins need heat to ripen.",aroma:"Blackcurrant, black cherry; green bell pepper, mint; cedar and vanilla from oak.",
+  style:"Dry, high tannin, high acidity, medium to full body. Often oaked; often blended (with Merlot for softness and body).",
+  where:"Bordeaux, blended with Merlot; California; Australia (sometimes with Shiraz); Chile; South Africa."},
+ {n:"Merlot",c:"black",tag:"Soft and fruity",band:"#741843",
+  climate:"Moderate to warm.",aroma:"Red fruit (strawberry, red plum) to black fruit (blackberry, black plum); vanilla from oak.",
+  style:"Dry, medium to full body, medium acidity, medium tannin. Often oaked.",
+  where:"Bordeaux, with Cabernet Sauvignon (Saint-Émilion is Merlot-led); Chile; California."},
+ {n:"Pinot Noir",c:"black",tag:"Red fruit and fresh acidity",band:"#9A2236",
+  climate:"Cool to moderate; thin skins.",aroma:"Strawberry, red cherry, raspberry; vanilla and smoke from oak.",
+  style:"Dry, light to medium body, low to medium tannin, high acidity. Not usually blended for red wine.",
+  where:"Red Burgundy, France; New Zealand, its principal black grape; Champagne, with Chardonnay."},
+ {n:"Syrah / Shiraz",c:"black",tag:"Black fruit and spice",band:"#5A1546",
+  climate:"Moderate (Syrah, France) to warm (Shiraz, Australia).",aroma:"Blackberry, black cherry, black pepper, liquorice; vanilla or coconut from oak.",
+  style:"Dry, medium to full body, medium to high tannin, medium acidity. Northern Rhône: medium body, fresh blackberry and black pepper. Warm Australia: full body, jammy black cherry and liquorice.",
+  where:"Northern Rhône, France (Syrah); Australia, e.g. Barossa Valley (Shiraz)."}];
+const grid=$("#grapeGrid");
+grid.innerHTML=GRAPES.map((g,i)=>`<article class="gcard" data-c="${g.c}"><div class="band" style="background:${g.band}"></div><div class="in">
+<h4>${g.n}</h4><span class="tag">${g.tag}</span><span class="small muted">${g.c==="white"?"White grape":"Black grape"}</span>
+<dl id="gd${i}"><dt>Climate</dt><dd>${g.climate}</dd><dt>Aromas and flavours</dt><dd>${g.aroma}</dd><dt>Style</dt><dd>${g.style}</dd><dt>Where it grows</dt><dd>${g.where}</dd></dl>
+<button class="btn quiet sm more" aria-expanded="false" aria-controls="gd${i}">Show profile</button></div></article>`).join("");
+grid.addEventListener("click",e=>{const b=e.target.closest(".more");if(!b)return;const c=b.closest(".gcard");const o=c.classList.toggle("open");b.setAttribute("aria-expanded",o);b.textContent=o?"Hide profile":"Show profile"});
+seg($("#gFilter"),b=>{const f=b.dataset.f;$$(".gcard",grid).forEach(c=>c.hidden=f!=="all"&&c.dataset.c!==f)});
+
+/* match game */
+const PAIRS=[["Chablis","Chardonnay"],["Sancerre","Sauvignon Blanc"],["Mosel","Riesling"],["Veneto, Italy","Pinot Grigio"],["Red Burgundy","Pinot Noir"],["Barossa Valley","Shiraz"],["Saint-Émilion","Merlot"],["Napa Valley","Cabernet Sauvignon"]];
+let mSel=null,mTries=0,mDone=0;
+function matchInit(){
+  mSel=null;mTries=0;mDone=0;$("#matchMsg").textContent="";
+  $("#mPlaces").innerHTML=shuffle(PAIRS).map(p=>`<button data-k="${esc(p[1])}" data-side="p">${p[0]}</button>`).join("");
+  $("#mGrapes").innerHTML=shuffle(PAIRS).map(p=>`<button data-k="${esc(p[1])}" data-side="g">${p[1]}</button>`).join("");
+}
+$(".match").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b||b.classList.contains("ok"))return;
+  if(!mSel||mSel.dataset.side===b.dataset.side){if(mSel)mSel.classList.remove("sel");mSel=b;b.classList.add("sel");return}
+  mTries++;
+  if(mSel.dataset.k===b.dataset.k){[mSel,b].forEach(x=>{x.classList.remove("sel");x.classList.add("ok");x.disabled=true});mDone++;
+    $("#matchMsg").textContent=mDone===PAIRS.length?`All eight matched in ${mTries} tries.`:`${mDone} of 8 matched.`}
+  else{const a=mSel;[a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("no")});setTimeout(()=>[a,b].forEach(x=>x.classList.remove("no")),400);$("#matchMsg").textContent="Not a match. Try again."}
+  mSel=null;
+});
+$("#matchReset").onclick=matchInit;matchInit();
+
+/* ---------- other wines ---------- */
+const OTHER=[
+ {n:"Champagne",t:"sparkling",from:"France",g:"Chardonnay and Pinot Noir",s:"Typically dry, high acidity, green apple and lemon, with notes of toasted bread.",band:"#E6D57A"},
+ {n:"Prosecco",t:"sparkling",from:"Italy",g:"Glera",s:"Light-bodied, green fruit (pear) and floral aromas. Dry or medium.",band:"#E6DC9A"},
+ {n:"Cava",t:"sparkling",from:"Spain",g:"Local Spanish grapes",s:"Dry, with green fruit (apple) and citrus (lemon).",band:"#E3D27E"},
+ {n:"Sancerre",t:"white",from:"the Loire, France",g:"Sauvignon Blanc",s:"Dry, medium body, usually unoaked, high acidity, pronounced green apple and grass.",band:"#E3D77E"},
+ {n:"Chablis",t:"white",from:"Burgundy, France",g:"Chardonnay",s:"Dry, light to medium body, unoaked, high acidity, green apple and lemon.",band:"#E6D57A"},
+ {n:"Burgundy (white)",t:"white",from:"France",g:"Chardonnay",s:"Dry, medium body, oaked or unoaked, riper than Chablis: lemon and peach. Labels may say ‘Bourgogne’.",band:"#DDBB55"},
+ {n:"Sauternes",t:"white",from:"Bordeaux, France",g:"Mainly Sémillon and Sauvignon Blanc",s:"Sweet, full-bodied: apricot, honey and vanilla from oak, with balancing high acidity.",band:"#C9922E"},
+ {n:"White Zinfandel",t:"rose",from:"California, USA",g:"Zinfandel, a black grape",s:"Unoaked, low alcohol, medium sweet, strawberry and raspberry.",band:"#EA9EA6"},
+ {n:"Burgundy (red)",t:"red",from:"France",g:"Pinot Noir",s:"Dry, light to medium body, low to medium tannin, high acidity: raspberry, red cherry, sometimes vanilla and smoke from oak.",band:"#8E1730"},
+ {n:"Bordeaux",t:"red",from:"France",g:"Cabernet Sauvignon and Merlot",s:"Mostly red: dry, medium to full body, high acidity and tannin, blackberry and blackcurrant, cedar from oak.",band:"#4E1238"},
+ {n:"Beaujolais",t:"red",from:"France",g:"Gamay",s:"Dry, light body, unoaked, low tannin, fresh raspberry and red cherry.",band:"#8A1C45"},
+ {n:"Côtes du Rhône",t:"red",from:"France",g:"Mainly Grenache",s:"Dry, medium body: strawberry, red plum and white pepper. Oaked or unoaked.",band:"#7A1A3A"},
+ {n:"Châteauneuf-du-Pape",t:"red",from:"France",g:"Mainly Grenache",s:"Dry, full-bodied and high in alcohol: strawberry, with cloves from oak.",band:"#5E1530"},
+ {n:"Chianti",t:"red",from:"Italy",g:"Sangiovese",s:"Dry, medium body, high tannin and acidity: red cherry, red plum, dried herbs, sometimes cloves from oak.",band:"#7E1A2E"},
+ {n:"Rioja",t:"red",from:"Spain",g:"Mainly Tempranillo",s:"Dry, medium to full body: strawberry with vanilla from oak.",band:"#7A2033"},
+ {n:"Sherry",t:"fortified",from:"Spain",g:"Mainly Palomino",s:"Fortified white wine made in a range of styles: dry, medium or sweet.",band:"#C99A4E"},
+ {n:"Port",t:"fortified",from:"Portugal",g:"Local Portuguese black grapes",s:"Sweet, high alcohol, typically red and full-bodied, with high tannin and blackberry.",band:"#4A1028"}];
+const TYPE={sparkling:"Sparkling",white:"White",rose:"Rosé",red:"Red",fortified:"Fortified"};
+const og=$("#otherGrid");
+og.innerHTML=OTHER.map(o=>`<article class="gcard open" data-c="${o.t}"><div class="band" style="background:${o.band}"></div><div class="in"><h4>${o.n}</h4><span class="tag">${TYPE[o.t]} wine from ${o.from}</span><dl><dt>Grapes</dt><dd>${o.g}</dd><dt>Style</dt><dd>${o.s}</dd></dl></div></article>`).join("");
+seg($("#oFilter"),b=>{const f=b.dataset.f;$$(".gcard",og).forEach(c=>c.hidden=f!=="all"&&c.dataset.c!==f)});
+
+/* ---------- temperatures ---------- */
+const TEMPS=[
+ {k:"Sweet",lo:6,hi:8,read:"6–8°C",lab:"Well chilled",ex:"Sauternes, sweet Riesling. Cold keeps sweet wines fresh, not cloying."},
+ {k:"Sparkling",lo:6,hi:10,read:"6–10°C",lab:"Well chilled",ex:"Champagne, Prosecco, Cava. Colder wine holds its bubbles longer and is safer to open."},
+ {k:"Light whites & rosé",lo:7,hi:10,read:"7–10°C",lab:"Chilled",ex:"Pinot Grigio, Sauvignon Blanc, Provence rosé. Keeps them crisp and refreshing."},
+ {k:"Full or oaked whites",lo:10,hi:13,read:"10–13°C",lab:"Lightly chilled",ex:"Oaked Chardonnay. Slightly warmer so the richer flavours can show."},
+ {k:"Light reds",lo:12.4,hi:13.6,read:"around 13°C",lab:"Lightly chilled",ex:"Beaujolais, lighter Pinot Noir. A little chill lifts their fresh red fruit."},
+ {k:"Medium & full reds",lo:15,hi:18,read:"15–18°C",lab:"Room temperature",ex:"Cabernet Sauvignon, Merlot, Shiraz. Any colder and the tannins taste harsh."}];
+$("#tempBtns").innerHTML=TEMPS.map((t,i)=>`<button data-i="${i}" aria-pressed="${i===0}">${t.k}</button>`).join("");
+$("#tticks").innerHTML=[0,2,4,6,8,10,12,14,16,18,20].map(v=>`<span style="left:${v*5}%">${v}°</span>`).join("");
+function temp(i){const t=TEMPS[i];const band=$("#tband");band.style.left=(t.lo*5)+"%";band.style.width=((t.hi-t.lo)*5)+"%";$("#tRead").textContent=t.lab;$("#tLab").textContent="Typically "+t.read+". The exam uses the description, not the number.";$("#tEx").textContent=t.ex}
+seg($("#tempBtns"),b=>temp(+b.dataset.i));temp(0);
+
+/* ---------- sparkling order game ---------- */
+const OPEN=["Chill the bottle well","Remove the foil","Loosen the wire cage, keeping your hand over the cork from now on","Hold the bottle at an angle, pointing away from people","Hold the cork in one hand and the base of the bottle in the other","Holding the cork still, turn the bottle","Control the cork so the gas escapes with a quiet ‘phut’ and no wine is lost","Pour slowly, letting the foam settle"];
+let oNext=0;
+function orderInit(){oNext=0;$("#orderMsg").textContent="Tap the steps in order, starting with the first.";
+  $("#orderPool").innerHTML=shuffle(OPEN.map((s,i)=>({s,i}))).map(o=>`<button data-i="${o.i}">${o.s}</button>`).join("")}
+$("#orderPool").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.classList.contains("placed"))return;
+  if(+b.dataset.i===oNext){b.classList.add("placed");oNext++;b.dataset.pos=oNext;b.disabled=true;
+    const pool=$("#orderPool");const placed=$$(".placed",pool).sort((a,c)=>a.dataset.pos-c.dataset.pos);placed.forEach(p=>pool.appendChild(p));$$("button:not(.placed)",pool).forEach(p=>pool.appendChild(p));
+    $("#orderMsg").textContent=oNext===OPEN.length?"Perfect. Safe, quiet and no wine lost.":`Step ${oNext} placed. What comes next?`}
+  else{b.classList.add("no");setTimeout(()=>b.classList.remove("no"),400);$("#orderMsg").textContent="Not yet. Think about safety first."}});
+$("#orderReset").onclick=orderInit;orderInit();
+
+/* ---------- food ---------- */
+const ATTR=[["Sweetness",1],["Acidity",-1],["Drying and bitterness",-1],["Fruitiness",1],["Body",1],["Alcohol",-1]];
+const FOOD={
+ "Sweetness":{e:[-1,1,1,-1,0,0],risk:"hi",d:"Desserts, sweet sauces and sweet elements in savoury dishes.",tip:"Choose a wine at least as sweet as the food."},
+ "Umami":{e:[-1,1,1,-1,0,0],risk:"hi",d:"A savoury taste in mushrooms, asparagus, ripe cheese, cured meat, eggs and soy sauce.",tip:"Avoid very tannic or oaky wines. A little salt or lemon in the dish helps."},
+ "Acidity":{e:[1,-1,-1,1,0,0],risk:"lo",d:"Lemon, vinegar, tomatoes, vinaigrette dressings.",tip:"Choose a high-acid wine, or it will taste flat."},
+ "Salt":{e:[0,-1,-1,1,1,0],risk:"lo",d:"Salty foods such as feta, olives, smoked fish and fries.",tip:"Salt makes most wines taste better: smoother, fruitier and fuller."},
+ "Chilli heat":{e:[0,0,0,0,0,1],risk:"mid",d:"Fresh chilli, chilli sauces and many spicy dishes.",tip:"Chilli makes alcohol more noticeable, and alcohol makes the dish feel hotter. Choose a lower-alcohol wine."},
+ "Fat":{e:[0,-1,0,0,0,0],risk:"mid",d:"Butter, cream, cheese, fatty meat and fried food.",tip:"Fat makes a wine seem less acidic, so a high-acid wine keeps the match fresh."},
+ "Flavour intensity":{e:null,risk:"mid",d:"How strongly flavoured a dish is, from delicate steamed fish to a rich beef stew.",tip:"Match intensity: a delicate wine is overpowered by intensely flavoured food, and a powerful wine overwhelms delicate food."}};
+const fxB=$("#fxBtns");fxB.innerHTML=Object.keys(FOOD).map((k,i)=>`<button data-k="${k}" aria-pressed="${i===0}">${k}</button>`).join("");
+function fx(k){const f=FOOD[k];
+  $("#fxDesc").innerHTML=`<span class="risk ${f.risk}">${{hi:"High risk",lo:"Low risk",mid:"Balance it"}[f.risk]}</span> &nbsp;${f.d}`;
+  $("#fxGrid").innerHTML=!f.e?'<p class="small muted" style="grid-column:1/-1;margin:0">Flavour intensity doesn’t push the wine’s structure up or down. It is about balance: whichever is more intense, the food or the wine, will dominate the other.</p>':ATTR.map(([a,g],i)=>{const v=f.e[i];const cls=v===0?"same":v*g>0?"down":"up";const ar=v>0?"↑ more":v<0?"↓ less":"no change";return `<div class="fx ${cls}"><span>${a}</span><span class="ar">${ar}</span></div>`}).join("");
+  $("#fxTip").innerHTML="<strong>Tip:</strong> "+f.tip}
+seg(fxB,b=>fx(b.dataset.k));fx("Sweetness");
+
+/* ---------- pairing practice ---------- */
+const PW=[
+ {n:"Champagne",sw:0,ac:3,tn:0,alc:12.5,bd:1},{n:"Prosecco",sw:1,ac:2,tn:0,alc:11,bd:1},
+ {n:"Chablis",sw:0,ac:3,tn:0,alc:12.5,bd:1},{n:"Sancerre",sw:0,ac:3,tn:0,alc:12.5,bd:2},
+ {n:"German Riesling",sw:1,ac:3,tn:0,alc:9,bd:1},{n:"Oaked Australian Chardonnay",sw:0,ac:2,tn:1,alc:14,bd:3},
+ {n:"White Zinfandel",sw:1,ac:2,tn:0,alc:10.5,bd:1},{n:"Beaujolais",sw:0,ac:2,tn:1,alc:12.5,bd:1},
+ {n:"Rioja",sw:0,ac:2,tn:2,alc:13.5,bd:2},{n:"Bordeaux",sw:0,ac:3,tn:3,alc:13.5,bd:2},
+ {n:"Australian Shiraz",sw:0,ac:2,tn:2,alc:15,bd:3},{n:"Sauternes",sw:2,ac:3,tn:1,alc:13.5,bd:3},
+ {n:"Port",sw:2,ac:2,tn:3,alc:20,bd:3}];
+const PD=[
+ {n:"Lemon tart",note:"Sweet and sharp, medium intensity.",sweet:2,acid:1,int:2},
+ {n:"Mushroom risotto",note:"Umami-rich, with salty parmesan and butter.",umami:1,salt:1,fat:1,int:2},
+ {n:"Thai green curry",note:"Chilli heat and rich coconut milk.",chilli:1,fat:1,int:2},
+ {n:"Steak and salted fries",note:"Salty, fatty and full-flavoured.",salt:1,fat:1,int:3},
+ {n:"Goat’s cheese salad",note:"Tangy vinaigrette and salty cheese; light.",acid:1,salt:1,int:1},
+ {n:"Steamed fish with lemon",note:"Delicate, with a squeeze of lemon.",acid:1,int:1}];
+function pairScore(d,w){let sc=1;const why=[];
+ if(d.sweet){if(w.sw>=d.sweet){sc+=1;why.push("It is at least as sweet as the dish.")}else{sc-=3;why.push("The sweet dish will make it taste less fruity, more acidic and more drying.")}}
+ if(d.umami){if(w.tn>=2){sc-=3;why.push("Umami will make its tannin taste more drying and bitter.")}else why.push("Low in tannin and oak, so it copes with umami; the salty cheese helps too.")}
+ if(d.acid){if(w.ac>=3){sc+=1;why.push("Its high acidity matches the acid in the food.")}else{sc-=2;why.push("Acid in the food will make it taste flat.")}}
+ if(d.salt){sc+=1;why.push("Salt will make it taste smoother and fruitier.")}
+ if(d.fat){if(w.ac>=3){sc+=1;why.push("High acidity stays fresh even though fat makes wine seem less acidic.")}else if(w.ac<=1){sc-=1;why.push("Fat will make it seem flabby.")}}
+ if(d.chilli){if(w.alc>=14){sc-=2;why.push("Chilli will make its high alcohol stand out, and the dish feel hotter.")}else if(w.alc<=11){sc+=1;why.push("Its low alcohol keeps the heat in check.")}if(w.tn>=2){sc-=1;why.push("Heat and firm tannin together feel harsh.")}}
+ const gap=Math.abs(d.int-w.bd);
+ if(gap>=2){sc-=2;why.push(d.int>w.bd?"The dish will overwhelm this light wine.":"This powerful wine will overwhelm the dish.")}else if(gap===0){sc+=1;why.push("Its weight matches the dish.")}
+ return{sc,why}}
+const pDish=$("#pDish"),pWine=$("#pWine");
+pDish.innerHTML=PD.map((d,i)=>`<button data-v="${i}" aria-pressed="${i===0}">${d.n}</button>`).join("");
+pWine.innerHTML=PW.map((w,i)=>`<button data-v="${i}" aria-pressed="${i===0}">${w.n}</button>`).join("");
+function pair(){const d=PD[+segVal(pDish)],w=PW[+segVal(pWine)];const r=pairScore(d,w);
+ $("#pDishNote").textContent=d.note;
+ $("#pVerdict").textContent=(r.sc>=3?"Great match":r.sc>=1?"Works":"Best avoided")+": "+w.n+" with "+d.n.toLowerCase();
+ $("#pWhy").innerHTML=r.why.map(x=>`<li>${x}</li>`).join("")||"<li>No strong interactions either way.</li>";$("#pBestOut").textContent=""}
+seg(pDish,pair);seg(pWine,pair);pair();
+$("#pBest").onclick=()=>{const d=PD[+segVal(pDish)];const best=PW.filter(w=>pairScore(d,w).sc>=3).map(w=>w.n);
+ $("#pBestOut").textContent=best.length?"Great matches for "+d.n.toLowerCase()+": "+best.join(", ")+".":"No wine on this list is a great match; look for one that “works”."};
+
+/* ---------- tasting note ---------- */
+const TN={col:["Lemon","Gold","Pink","Purple","Ruby","Garnet"],sw:["Dry","Medium","Sweet"],ac:["Low","Medium","High"],tn:["Low","Medium","High"],al:["Low","Medium","High"],bd:["Light","Medium","Full"]};
+const AROMAS={"Green fruit":["apple","pear"],"Citrus fruit":["lemon","lime","grapefruit"],"Stone fruit":["peach","apricot"],"Tropical fruit":["pineapple","banana","passion fruit"],"Red fruit":["strawberry","raspberry","red cherry","red plum"],"Black fruit":["blackcurrant","blackberry","black cherry","black plum"],"Floral and herbaceous":["flowers","grass","asparagus","green bell pepper","mint","dried herbs"],"Spice":["black pepper","white pepper","liquorice"],"Oak":["vanilla","cedar","cloves","coconut","smoke"],"Other":["honey","toasted bread","earth","mushroom","leather"]};
+const tnState={col:"Lemon",sw:"Dry",ac:"High",tn:"Low",al:"Medium",bd:"Light",ar:new Set(["apple","lemon"])};
+$$("[data-tn]").forEach(el=>{const k=el.dataset.tn;el.innerHTML=TN[k].map(v=>`<button data-v="${v}" aria-pressed="${tnState[k]===v}">${v}</button>`).join("");seg(el,b=>{tnState[k]=b.dataset.v;note()})});
+$("#aromaGroups").innerHTML=Object.entries(AROMAS).map(([g,l])=>`<div class="grp"><h4>${g}</h4><div class="chips">${l.map(a=>`<button class="chip" data-a="${a}" aria-pressed="${tnState.ar.has(a)}">${a}</button>`).join("")}</div></div>`).join("");
+$("#aromaGroups").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;const a=b.dataset.a;tnState.ar.has(a)?tnState.ar.delete(a):tnState.ar.add(a);b.setAttribute("aria-pressed",tnState.ar.has(a));note()});
+const isRed=()=>["Purple","Ruby","Garnet"].includes(tnState.col);
+function listJoin(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]}
+function note(){
+  $("#tanField").hidden=!isRed();
+  const kind=isRed()?"red":tnState.col==="Pink"?"rosé":"white";
+  const ar=[...tnState.ar];
+  let s=`A ${tnState.col.toLowerCase()} ${kind} wine`;
+  s+=ar.length?` with aromas of ${listJoin(ar)}. `:". ";
+  s+=`On the palate it is ${tnState.sw.toLowerCase()}, with ${tnState.ac.toLowerCase()} acidity`;
+  if(isRed())s+=`, ${tnState.tn.toLowerCase()} tannin`;
+  s+=`, ${tnState.al.toLowerCase()} alcohol and a ${tnState.bd.toLowerCase()} body.`;
+  $("#noteOut").textContent=s;
+  $("#noteGuess").textContent="Could it be… "+guess(kind,ar);
+}
+function guess(kind,ar){
+  const has=x=>x.some(a=>ar.includes(a));
+  if(kind==="rosé")return"a rosé, perhaps from Provence if it is pale and dry.";
+  if(kind==="white"){
+    if(tnState.sw!=="Dry"&&tnState.ac==="High")return"a German Riesling.";
+    if(has(["vanilla","cedar","cloves","coconut","smoke"]))return"an oaked Chardonnay.";
+    if(has(["grass","green bell pepper","asparagus","passion fruit"]))return"a Sauvignon Blanc, from Sancerre or Marlborough.";
+    if(has(["pineapple","banana","mango"]))return"a warm-climate Chardonnay.";
+    if(tnState.bd==="Light")return"an Italian Pinot Grigio or a Chablis.";
+    return"a Chardonnay, perhaps a white Burgundy.";}
+  if(has(["black pepper"]))return"a Northern Rhône Syrah.";
+  if(has(["strawberry","raspberry"])&&tnState.tn==="Low")return"a Pinot Noir, perhaps red Burgundy.";
+  if(has(["blackcurrant","mint","cedar","green bell pepper"])&&tnState.tn==="High")return"a Cabernet Sauvignon, perhaps from Bordeaux.";
+  if(tnState.bd==="Full"&&has(["blackberry","black plum","black cherry","liquorice"]))return"an Australian Shiraz.";
+  if(has(["black plum","red plum"])||tnState.tn==="Medium")return"a Merlot.";
+  return"a Pinot Noir, Merlot or another red. Add more aromas to narrow it down.";
+}
+note();
+
+/* ---------- units ---------- */
+const abv=$("#abv");let ml=175;
+function units(){const a=+abv.value;$("#abvOut").textContent=a;const u=a*ml/1000;$("#unitsOut").textContent=u.toFixed(1)+" units";
+  $("#unitsNote").textContent=`${a}% × ${ml} ml ÷ 1,000. That is ${Math.round(u/14*100)}% of the 14-unit weekly guideline.`}
+abv.oninput=units;seg($("#volBtns"),b=>{ml=+b.dataset.ml;units()});units();
+
+/* ============ QUESTION BANK ============ */
+const BANK=[
+// styles
+["styles","Which of these is a fortified wine?",["Port","Prosecco","Chablis","Rioja"],"Port has grape spirit added during fermentation."],
+["styles","Sparkling wine gets its bubbles from:",["Carbon dioxide trapped in the wine","Oxygen added at bottling","Nitrogen gas","High alcohol"],"CO₂ from fermentation is trapped and released on opening."],
+["styles","A fortified wine is made by:",["Adding grape spirit","Adding sugar after fermentation","Ageing in new oak","Leaving the grapes to dry"],"Fortification means adding a grape spirit, raising alcohol to about 15–22%."],
+["styles","A wine described as “dry” has:",["Little or no sugar","High tannin","High acidity","Low alcohol"],"Dry is about sweetness only. Tannin and acidity are separate features."],
+["styles","Fortified wines usually contain how much alcohol?",["15–22%","5–8%","9–11%","12–14%"],"The added spirit lifts fortified wines to around 15–22% abv."],
+["styles","The “body” of a wine describes:",["How heavy it feels in the mouth","How deep its colour is","How sweet it is","How long the flavour lasts"],"Body is weight in the mouth, like skimmed versus whole milk."],
+["styles","Which three words describe wine colour at Level 1?",["White, rosé, red","Light, medium, full","Dry, medium, sweet","Still, sparkling, fortified"],"Colour: white, rosé or red. The others describe body, sweetness and type."],
+["styles","Which factor contributes most to a wine’s body?",["Alcohol","Acidity","Colour","Bubbles"],"Alcohol is the main contributor to body, helped by sugar and tannin."],
+["styles","Which of these is NOT one of the three types of wine?",["Oaked","Still","Sparkling","Fortified"],"The three types are still, sparkling and fortified."],
+["styles","A wine’s style is best described as:",["A combination of its colour, structure, aromas and flavours","Its price","The shape of its bottle","Its grape variety only"],"Style combines colour, sweetness, acidity, tannin, alcohol, body and flavours."],
+["styles","Tannin is found mainly in:",["Red wines","White wines","Rosé wines","Sparkling wines"],"Tannin comes from black grape skins, so it is mostly found in reds."],
+// making
+["making","During fermentation, yeast converts sugar into:",["Alcohol and carbon dioxide","Acid and water","Tannin and alcohol","Water and oxygen"],"Sugar + yeast → alcohol + carbon dioxide."],
+["making","Where does the colour of red wine come from?",["Grape skins","Grape pulp","Grape seeds","Oak barrels"],"Colour is in the skins. The juice of almost all black grapes is colourless."],
+["making","Tannin in red wine comes mainly from:",["Grape skins","Grape pulp","Yeast","Sugar"],"Tannin comes from skins (and seeds and stems), extracted when reds ferment on their skins."],
+["making","When making white wine, the grapes are pressed:",["Before fermentation","After fermentation","After maturation","Not at all"],"Whites are pressed first so only the juice ferments."],
+["making","When making red wine, the grapes are pressed:",["After fermentation","Before crushing","Before fermentation","Only for rosé"],"Reds ferment on their skins and are pressed afterwards."],
+["making","Which flavours are typically added by new oak barrels?",["Vanilla, toast, smoke","Grass, green pepper","Lemon, lime","Strawberry, raspberry"],"New oak gives vanilla, toast, smoke and sweet spice."],
+["making","A sweet wine can be made by:",["Stopping fermentation before all the sugar is converted","Fermenting at a very high temperature","Adding extra tannin","Pressing the grapes twice"],"Stopping fermentation early leaves residual sugar."],
+["making","Grapes grown in a cool climate generally have:",["Higher acidity and less sugar","Lower acidity and more sugar","More tannin and alcohol","Deeper colour"],"Cool climates ripen grapes less: more acid, less sugar."],
+["making","Wines from hot climates are likely to have:",["Higher alcohol and fuller body","Higher acidity and lighter body","More green fruit flavours","Paler colour"],"More sun means more sugar, so more alcohol and body."],
+["making","As grapes ripen on the vine:",["Sugar increases and acidity decreases","Sugar and acidity both increase","Sugar decreases and acidity increases","Sugar and acidity both decrease"],"Ripening brings more sugar and less acid."],
+["making","The juice of most black grapes is:",["Colourless","Red","Purple","Pink"],"That’s why white wine can be made from black grapes and rosé needs skin contact."],
+["making","Rosé wine is usually made from:",["Black grapes with a short time on the skins","White grapes left on the skins for weeks","Black grapes pressed after fermentation","White grapes only"],"Short skin contact gives a little colour and very little tannin."],
+["making","Maturing a white wine in stainless steel will:",["Preserve fresh fruit flavours","Add vanilla and toast","Add tannin","Make it sweet"],"Steel is neutral and airtight, keeping the wine fresh and fruity."],
+["making","Which part of the grape contains sugar, water and acid?",["Pulp","Skin","Seeds","Stem"],"The pulp holds the juice: water, sugar and acid."],
+["making","Which stage of the vine’s year comes just before the grapes ripen?",["Flowering","Harvest","Pruning in winter","Fermentation"],"Pollinated flowers become grapes, which then ripen through summer."],
+["making","Which order is correct for making white wine?",["Crushing, pressing, fermentation, maturation, bottling","Crushing, fermentation, pressing, bottling, maturation","Pressing, fermentation, crushing, maturation, bottling","Fermentation, crushing, pressing, maturation, bottling"],"White grapes are pressed before fermentation."],
+["making","Which order is correct for making red wine?",["Crushing, fermentation, draining, pressing, maturation, bottling","Crushing, pressing, fermentation, draining, maturation, bottling","Pressing, crushing, draining, fermentation, maturation, bottling","Crushing, draining, pressing, fermentation, maturation, bottling"],"Reds ferment on their skins, then are drained and pressed."],
+["making","How does rosé get its pink colour?",["It starts fermenting with the skins, then is drained off them early","It is aged in red oak barrels","Colouring is added before bottling","White grapes are fermented with their seeds"],"A short time fermenting on black grape skins gives a little colour."],
+// grapes
+["grapes","Chablis is made from which grape?",["Chardonnay","Sauvignon Blanc","Riesling","Pinot Grigio"],"Chablis is cool-climate, usually unoaked Chardonnay."],
+["grapes","Sancerre is made from which grape?",["Sauvignon Blanc","Chardonnay","Pinot Gris","Riesling"],"Sancerre and Pouilly-Fumé in the Loire are Sauvignon Blanc."],
+["grapes","Which white grape is known for grassy, green pepper aromas and high acidity?",["Sauvignon Blanc","Chardonnay","Pinot Grigio","Merlot"],"These herbaceous notes are classic Sauvignon Blanc."],
+["grapes","Which statement about Riesling is true?",["It has high acidity and can be made dry or sweet","It is usually heavily oaked","It is a black grape","It has low acidity"],"Riesling is high in acidity, rarely oaked and made in every sweetness level."],
+["grapes","Italian Pinot Grigio is usually:",["Light-bodied, dry and fairly neutral","Full-bodied and oaked","Sweet and fortified","Deep gold in colour"],"Pinot Grigio is a light, crisp, dry white with green apple and citrus."],
+["grapes","Which black grape is thin-skinned, pale, low in tannin and tastes of red fruit?",["Pinot Noir","Cabernet Sauvignon","Syrah","Merlot"],"Pinot Noir: pale, low tannin, strawberry and raspberry."],
+["grapes","Red Burgundy is made from:",["Pinot Noir","Cabernet Sauvignon","Merlot","Syrah"],"Burgundy reds are Pinot Noir; whites are Chardonnay."],
+["grapes","Which black grape has blackcurrant flavours, high tannin and needs a warm climate?",["Cabernet Sauvignon","Pinot Noir","Pinot Gris","Riesling"],"Thick-skinned Cabernet Sauvignon needs warmth to ripen fully."],
+["grapes","Compared with Cabernet Sauvignon, Merlot usually has:",["Softer, lower tannins","Higher tannin","Paler colour and red fruit","Much higher acidity"],"Merlot is rounder, with medium tannin and plum fruit."],
+["grapes","Syrah from the Northern Rhône is known for aromas of:",["Black pepper and blackberry","Grass and asparagus","Pineapple and banana","Strawberry and mushroom"],"Peppery spice with black fruit is classic Northern Rhône Syrah."],
+["grapes","Shiraz is another name for:",["Syrah","Merlot","Pinot Noir","Cabernet Sauvignon"],"Same grape: Syrah in France, Shiraz in Australia."],
+["grapes","The Barossa Valley in Australia is famous for:",["Shiraz","Pinot Grigio","Sauvignon Blanc","Pinot Noir"],"Barossa Shiraz is full-bodied with ripe black fruit."],
+["grapes","Chardonnay from a hot climate is most likely to show:",["Tropical fruit such as pineapple and banana","Green apple and lemon","Grass and green pepper","Black pepper"],"Hot climates give riper, tropical fruit flavours."],
+["grapes","Which grape is often blended with Cabernet Sauvignon in Bordeaux?",["Merlot","Riesling","Pinot Noir","Chardonnay"],"Bordeaux reds are commonly Cabernet Sauvignon and Merlot blends."],
+["grapes","Marlborough in New Zealand is best known for:",["Sauvignon Blanc","Cabernet Sauvignon","Riesling","Syrah"],"Marlborough Sauvignon Blanc is intensely aromatic."],
+["grapes","The Mosel region of Germany is famous for:",["Riesling","Merlot","Chardonnay","Shiraz"],"The Mosel makes light, high-acid Riesling."],
+["grapes","Which white grape is most often matured in oak?",["Chardonnay","Riesling","Sauvignon Blanc","Pinot Grigio"],"Chardonnay pairs well with oak; the others are usually unoaked."],
+["grapes","Which of these is a white grape?",["Riesling","Merlot","Syrah","Pinot Noir"],"Riesling is white; the rest are black grapes."],
+["grapes","A Merlot-dominant blend from Bordeaux most likely comes from:",["Saint-Émilion","Chablis","Sancerre","Beaujolais"],"Saint-Émilion in Bordeaux makes Merlot-led blends."],
+["grapes","Which black grape prefers a cool to moderate climate?",["Pinot Noir","Cabernet Sauvignon","Shiraz","None of them"],"Thin-skinned Pinot Noir loses its finesse in heat."],
+["grapes","Chablis is:",["A dry white wine","A dry red wine","A sweet white wine","A sweet red wine"],"Chablis is dry Chardonnay from a cool region."],
+["grapes","Red Bordeaux is mainly made from:",["Cabernet Sauvignon and Merlot","Pinot Noir and Gamay","Grenache and Syrah","Riesling and Chardonnay"],"Bordeaux reds blend Cabernet Sauvignon and Merlot."],
+["grapes","Which two principal grapes are used to make Champagne?",["Chardonnay and Pinot Noir","Riesling and Merlot","Sauvignon Blanc and Syrah","Pinot Grigio and Cabernet Sauvignon"],"Champagne blends Chardonnay and Pinot Noir, often with Meunier."],
+["grapes","Which grape variety produces red wine?",["Cabernet Sauvignon","Sauvignon Blanc","Riesling","Chardonnay"],"Cabernet Sauvignon is a black grape; the others are white."],
+["grapes","White Burgundy is made from:",["Chardonnay","Sauvignon Blanc","Riesling","Pinot Grigio"],"White Burgundy, including Chablis, is Chardonnay."],
+["other","Beaujolais is:",["A light-bodied red with low tannin","A full-bodied, tannic red","A sweet white","A fortified wine"],"Beaujolais is light, juicy and low in tannin."],
+["other","Which sparkling wine comes from Spain?",["Cava","Prosecco","Champagne","Sauternes"],"Cava is Spain’s sparkling wine."],
+["other","Prosecco comes from:",["Italy","Spain","France","Portugal"],"Prosecco is a light, fruity sparkling wine from north-east Italy."],
+["other","Sauternes is:",["A sweet white wine","A dry red wine","A dry rosé","A sparkling wine"],"Sauternes is a sweet white from Bordeaux."],
+["other","White Zinfandel is usually:",["A medium-sweet rosé","A dry, full-bodied red","A dry white","A fortified wine"],"Californian White Zinfandel is a light, medium-sweet rosé."],
+["other","Rioja, often showing vanilla from oak, is a red wine from:",["Spain","Italy","France","Portugal"],"Rioja is made mainly from Tempranillo in northern Spain."],
+["other","Chianti is:",["A red wine from Italy","A white wine from France","A sparkling wine from Spain","A fortified wine from Portugal"],"Chianti is a high-acid red from Tuscany."],
+["other","Châteauneuf-du-Pape is typically:",["A full-bodied red with high alcohol","A light, low-alcohol white","A medium-sweet rosé","A sparkling wine"],"It is a rich red from the southern Rhône."],
+["other","Port is:",["A sweet fortified wine from Portugal","A dry sparkling wine from Spain","A sweet white wine from France","A light red wine from Italy"],"Port is fortified during fermentation, keeping it sweet."],
+["other","Sherry is a fortified wine from:",["Spain","Portugal","Italy","France"],"Sherry comes from Jerez in southern Spain."],
+["other","Which of these is a still red wine?",["Côtes du Rhône","Cava","Sherry","Sauternes"],"Côtes du Rhône is a medium-bodied red from France."],
+// serving
+["serving","Medium- and full-bodied red wines should be served:",["At room temperature","Well chilled","Chilled","Lightly chilled"],"Room temperature (about 15–18°C) keeps tannins soft and fruit expressive."],
+["serving","Sweet wines should be served:",["Well chilled","At room temperature","Lightly chilled","Chilled"],"Well chilled (about 6–8°C) keeps sweet wines refreshing."],
+["serving","Light-bodied reds such as Beaujolais are best served:",["Lightly chilled","Well chilled","Chilled","At room temperature"],"Lightly chilled (around 13°C) lifts their fresh red fruit."],
+["serving","Full-bodied white wines are best served:",["Lightly chilled","Well chilled","Chilled","At room temperature"],"Lightly chilled (about 10–13°C) lets richer flavours show."],
+["serving","Sparkling wines should be served:",["Well chilled","Lightly chilled","At room temperature","Warm"],"Well chilled (about 6–10°C) keeps the bubbles and makes opening safer."],
+["serving","Why are bottles sealed with cork stored on their side?",["To keep the cork moist so air cannot get in","To let sediment settle on the cork","To save space only","To let the wine breathe"],"A dried-out cork shrinks and lets oxygen in."],
+["serving","Which are the best conditions for storing wine?",["Cool, dark and at a constant temperature","Warm and bright","In a kitchen near the oven","Cold, then warm, in rotation"],"Constant cool darkness, away from vibration and strong smells."],
+["serving","When opening sparkling wine, you should twist:",["The bottle, not the cork","The cork, not the bottle","The cage only","Both quickly at once"],"Twisting the bottle gives control so the cork eases out."],
+["serving","A wine affected by cork taint smells:",["Musty, like damp cardboard","Of vanilla and toast","Of fresh lemons","Of black pepper"],"TCA cork taint gives musty, damp-cardboard aromas and dull fruit."],
+["serving","Which glass is best for sparkling wine?",["A tall flute","A large bowl","A small sherry glass","A tumbler"],"A flute shows the bubbles and keeps them longer."],
+["serving","If a full-bodied red is served too cold, it will taste:",["More tannic and bitter, less fruity","Sweeter and fruitier","More alcoholic","Fizzy"],"Cold makes tannins harsher and hides fruit."],
+["serving","With a vacuum pump or inert gas, an opened still wine stays fresh for:",["A few days","A few hours","Several months","Over a year"],"Preservation systems slow oxidation for a few days."],
+["serving","Why must glasses be rinsed free of detergent?",["Residue can taint aromas and flatten sparkling wine","It makes wine sweeter","It increases alcohol","It adds colour"],"Detergent residue spoils aromas and kills bubbles."],
+["serving","Light- and medium-bodied white and rosé wines should be served:",["Chilled","At room temperature","Lightly chilled","Warm"],"Chilled (about 7–10°C) keeps them crisp and fresh."],
+["serving","Which is a method of preserving an opened bottle of still wine?",["A vacuum system","Leaving it open in a warm room","Shaking the bottle","Storing it upright in sunlight"],"Vacuum systems remove air; blanket systems cover the wine with an inert gas."],
+["serving","Before serving a wine to a guest, you should check its:",["Appearance and nose","Price and label","Cork weight","Bottle shape"],"A quick look and sniff catches cloudy, oxidised or corked wine."],
+["serving","True or false: red wines are best stored in direct sunlight.",["False","True"],"Light damages wine, so store it in the dark."],
+// food
+["food","Sweetness in food makes a wine taste:",["More drying, more acidic and less fruity","Sweeter and fruitier","Less acidic and smoother","Fuller-bodied"],"Sweet food makes wine taste harder and thinner."],
+["food","When matching wine with a dessert, the wine should be:",["At least as sweet as the food","Dry and high in tannin","Low in acidity","A full-bodied red"],"Otherwise the wine tastes thin and sour."],
+["food","Salt in food makes a wine taste:",["Less acidic and less drying, with more body","More bitter","More acidic","Less fruity and thinner"],"Salt softens wine: smoother and fuller."],
+["food","Acid in food makes a wine taste:",["Less acidic, sweeter and fruitier","More acidic","More bitter","Thinner"],"Acidic food reduces perceived acidity in wine."],
+["food","Umami in food, such as mushrooms or ripe cheese, makes a wine taste:",["More bitter and drying, and less fruity","Sweeter and fruitier","Smoother and fuller","Less acidic"],"Umami acts like sweetness: wine tastes harder."],
+["food","Chilli heat in food increases the:",["Burning sensation of alcohol","Sweetness of the wine","Fruitiness of the wine","Body of the wine"],"Chilli makes alcohol burn more, and tannin taste harsher."],
+["food","Which two food components are considered low risk?",["Salt and acid","Sweetness and umami","Sweetness and chilli heat","Umami and chilli heat"],"Salt and acid make wines taste softer."],
+["food","Which wine is the safest choice with a spicy chilli dish?",["A low-alcohol white","A high-alcohol, tannic red","A full-bodied, oaked white at 14% abv","A fortified wine"],"Chilli makes alcohol more noticeable, so lower alcohol is safer."],
+["food","Which wine would best cut through a rich, creamy sauce?",["A high-acid white","A low-acid, full-bodied white","A sweet fortified wine","A high-tannin red"],"High acidity refreshes the palate against fat."],
+["food","A delicately flavoured dish served with a powerful, full-flavoured wine is likely to:",["Be overpowered by the wine","Taste more intense","Make the wine taste lighter","Make the wine taste sweeter"],"Match intensity so neither food nor wine dominates."],
+["food","True or false: umami makes wines seem more sweet and fruity.",["False","True"],"Umami makes wine seem less sweet and fruity, and more bitter and acidic."],
+["food","A salad with a sharp lemon dressing needs a wine that is:",["High in acidity","Low in acidity","Heavily oaked","Sweet and fortified"],"The wine must match the food’s acidity or it tastes flat."],
+["food","Adding a little salt or lemon juice to an umami-rich dish will:",["Make the wine match better","Make the wine taste more bitter","Increase alcohol burn","Remove the wine’s fruit"],"Salt and acid offset umami’s hardening effect."],
+// tasting
+["tasting","In the Level 1 tasting approach, what is assessed under appearance?",["Colour","Acidity","Aromas","Tannin"],"Appearance at Level 1 is simply colour: white, rosé or red."],
+["tasting","Which of these is a structural characteristic assessed on the palate?",["Alcohol","Colour","Aroma of oak","Glass shape"],"Palate structure: sweetness, acidity, tannin, alcohol and body."],
+["tasting","Tannin is felt in the mouth as:",["A drying, grippy feeling on the gums","A burning feeling","A sweet taste on the tongue","Mouth-watering"],"Tannin grips and dries, like strong black tea."],
+["tasting","A wine with high acidity will make your mouth:",["Water","Feel dry and grippy","Feel warm","Feel sweet"],"Acidity triggers saliva."],
+["tasting","A warming sensation in the mouth and throat comes from:",["Alcohol","Acidity","Tannin","Sugar"],"Alcohol gives warmth; higher alcohol feels hotter."],
+["tasting","Before smelling a wine, you should:",["Swirl it to release the aromas","Chill it in the freezer","Add water","Shake the bottle"],"Swirling releases aroma compounds."],
+// alcohol
+["making","Rosé juice is drained from the black grape skins after:",["Only a few hours","Several weeks","A whole year","Bottling"],"A few hours on the skins gives just a little pink colour."],
+["making","In cool-climate regions it is common to grow:",["White grapes","Only black grapes","No grapes at all","Tropical fruit"],"Cool regions such as Germany favour white grapes; warm regions favour black."],
+["making","Which is an example of a cool-climate wine region?",["Germany","Parts of Australia","Parts of California","Regions near the Equator"],"Cool regions lie nearer the poles, such as Germany and northern France."],
+["making","As black grapes ripen, they change colour from:",["Green to purple","Purple to green","Golden to green","Red to white"],"White grapes turn golden; black grapes turn purple."],
+["styles","Most still and sparkling wines contain between:",["11.5% and 14% abv","3% and 5% abv","15% and 22% abv","25% and 40% abv"],"Still wines range from 8% to 15%, mostly 11.5–14%."],
+["styles","A medium-sweet wine can be made by:",["Adding unfermented grape juice to a dry wine","Adding oak chips","Fermenting with the skins","Adding water"],"Or by removing the yeast before all the sugar is used."],
+["styles","Which wine is an example of low alcohol?",["White Zinfandel","Châteauneuf-du-Pape","Port","Sherry"],"White Zinfandel is low in alcohol; Châteauneuf-du-Pape is high."],
+["styles","Which flavours can oak give a wine?",["Cedar, cloves, coconut, smoke, vanilla","Lemon, lime, grapefruit","Grass, asparagus, green pepper","Strawberry, raspberry, cherry"],"These are classic oak flavours."],
+["other","Which of these is typically a dry, medium-bodied red with white pepper notes?",["Côtes du Rhône","Sauternes","Prosecco","White Zinfandel"],"Côtes du Rhône: strawberry, red plum and white pepper."],
+["other","Which named wine is high in both tannin and acidity, with red cherry and dried herbs?",["Chianti","Beaujolais","Cava","White Zinfandel"],"Chianti is a dry, medium-bodied Italian red."],
+["serving","An ice bucket chills wine best when filled with:",["Ice and cold water","Ice only","Warm water","Salt only"],"Water makes the ice work far more efficiently."],
+["serving","A red wine that is too cold should be:",["Left to warm naturally in the room","Placed next to a radiator","Microwaved briefly","Put in hot water"],"Heating it quickly damages its flavours."],
+["serving","A hazy wine or one smelling of vinegar or wet cardboard is likely to be:",["Faulty","Ready to serve","Sweet","Sparkling"],"Check appearance and nose before serving."],
+["serving","What does a blanket system do?",["Pumps a gas into the bottle that pushes the air out","Heats the wine","Adds sugar","Removes the cork"],"The gas protects the wine without harming it."],
+["food","Fatty or oily food makes a wine seem:",["Less acidic","More acidic","Sweeter","More tannic"],"So high-acid wines work well with rich food."],
+["food","When recommending a wine with food, the most important thing to consider is:",["What the person likes","The price of the wine","The colour of the plate","The shape of the bottle"],"Personal preference comes first."],
+["tasting","Which is good preparation for tasting wine?",["A white surface and a clean palate","Brushing your teeth just before","Drinking coffee first","Wearing strong perfume"],"Avoid distracting smells and lingering flavours like toothpaste or coffee."],
+["alcohol","How many UK units are in a 750 ml bottle of wine at 12% abv?",["9","6","12","3"],"12 × 750 ÷ 1,000 = 9 units."],
+["alcohol","The UK guideline is not to regularly drink more than:",["14 units a week, spread over three or more days","14 units a day","21 units a week in one session","7 units a month"],"14 units a week, spread out, with drink-free days."],
+["alcohol","How many units are in a 175 ml glass of wine at 12% abv?",["2.1","1.0","3.5","5.0"],"12 × 175 ÷ 1,000 = 2.1 units."],
+["alcohol","One UK unit is equal to:",["10 ml of pure alcohol","100 ml of wine","One glass of wine","1 g of sugar"],"A unit is 10 ml (8 g) of pure alcohol."]
+];
+const prepQ=r=>{const [t,q,o,exp]=r;const sh=shuffle(o.map((x,i)=>({x,i})));return{t,q,opts:sh.map(s=>s.x),correct:sh.findIndex(s=>s.i===0),exp}};
+const LET="ABCD";
+
+/* ---------- module checks ---------- */
+function renderCheck(el){
+  const topic=el.dataset.topic.split(",")[0];const tops=el.dataset.topic.split(",");
+  const qs=shuffle(BANK.filter(r=>tops.includes(r[0]))).slice(0,4).map(prepQ);
+  el.innerHTML=`<div class="check-head"><h3>Check yourself</h3><button class="btn quiet sm" data-new>New questions</button></div>`+
+   qs.map((q,i)=>`<fieldset class="q" data-i="${i}"><legend>${i+1}. ${esc(q.q)}</legend><div class="opts">${q.opts.map((o,j)=>`<button class="opt" data-j="${j}"><span class="L">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div><p class="exp" hidden></p></fieldset>`).join("")+
+   `<p class="check-score" aria-live="polite"></p>`;
+  let answered=0,right=0;
+  el.onclick=e=>{
+    if(e.target.closest("[data-new]")){renderCheck(el);return}
+    const b=e.target.closest(".opt");if(!b||b.disabled)return;
+    const fs=b.closest(".q");const q=qs[+fs.dataset.i];const j=+b.dataset.j;
+    $$(".opt",fs).forEach((o,k)=>{o.disabled=true;if(k===q.correct)o.classList.add("right")});
+    if(j!==q.correct)b.classList.add("wrong");else right++;
+    const ex=$(".exp",fs);ex.hidden=false;ex.textContent=(j===q.correct?"Correct. ":"Not quite. ")+q.exp;
+    answered++;
+    if(answered===qs.length){$(".check-score",el).textContent=`You scored ${right} out of ${qs.length}. `+(right>=3?"Module marked as done.":"Review the module and try new questions.");
+      if(right>=3){progress[topic]=Math.max(progress[topic]||0,right);store.set("w1-progress",progress);paintProgress()}}
+  };
+}
+$$(".check").forEach(renderCheck);
+
+/* ============ EXAM ============ */
+const QUOTA={making:6,styles:4,grapes:7,other:5,tasting:2,serving:3,food:3};
+const TNAMES={styles:"Types and styles",making:"How wine is made",grapes:"Grape varieties",other:"Named wines",serving:"Storing and serving",food:"Food and wine",tasting:"Tasting",alcohol:"Alcohol and health"};
+let ex=null,tick=null;
+function histText(){const h=$("#examHistory");if(!examHist.length){h.textContent="";return}
+  h.textContent="Previous attempts: "+examHist.slice(-5).map(e=>e.score+"/30").join(", ")+". Best: "+bestExam()+"/30."}
+histText();
+$("#startExam").onclick=()=>{
+  let qs=[];Object.entries(QUOTA).forEach(([t,n])=>{qs=qs.concat(shuffle(BANK.filter(r=>r[0]===t)).slice(0,n))});
+  ex={qs:shuffle(qs).map(prepQ),ans:Array(30).fill(null),flag:new Set(),cur:0,end:Date.now()+45*60*1000};
+  $("#examIntro").hidden=true;$("#examResult").hidden=true;$("#examRun").hidden=false;$("#confirmBox").hidden=true;
+  renderQ();clearInterval(tick);tick=setInterval(timer,1000);timer();window.scrollTo(0,0);
+};
+function timer(){if(!ex)return;const left=Math.max(0,ex.end-Date.now());const m=Math.floor(left/60000),s=Math.floor(left/1000)%60;
+  const t=$("#timer");t.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");t.classList.toggle("warn",left<5*60000);
+  if(left<=0)finish(true)}
+function renderQ(){
+  const q=ex.qs[ex.cur];
+  $("#qCounter").textContent=`Question ${ex.cur+1} of 30`;
+  $("#examQ").innerHTML=`<h3>${esc(q.q)}</h3><div class="opts" role="radiogroup">${q.opts.map((o,j)=>`<button class="opt${ex.ans[ex.cur]===j?" picked":""}" role="radio" aria-checked="${ex.ans[ex.cur]===j}" data-j="${j}"><span class="L">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
+  $("#prevQ").disabled=ex.cur===0;$("#nextQ").textContent=ex.cur===29?"Review and finish":"Next";
+  const f=ex.flag.has(ex.cur);$("#flagQ").setAttribute("aria-pressed",f);$("#flagQ").textContent=f?"Unflag":"Flag for review";
+  $("#grid30").innerHTML=ex.qs.map((_,i)=>`<button class="${ex.ans[i]!==null?"ans ":""}${ex.flag.has(i)?"flag ":""}${i===ex.cur?"cur":""}" data-i="${i}" aria-label="Question ${i+1}${ex.ans[i]!==null?", answered":""}${ex.flag.has(i)?", flagged":""}">${i+1}</button>`).join("");
+}
+$("#examQ").addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;ex.ans[ex.cur]=+b.dataset.j;renderQ()});
+$("#prevQ").onclick=()=>{if(ex.cur>0){ex.cur--;renderQ()}};
+$("#nextQ").onclick=()=>{if(ex.cur<29){ex.cur++;renderQ()}else askFinish()};
+$("#flagQ").onclick=()=>{ex.flag.has(ex.cur)?ex.flag.delete(ex.cur):ex.flag.add(ex.cur);renderQ()};
+$("#grid30").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;ex.cur=+b.dataset.i;renderQ()});
+$("#submitBtn").onclick=askFinish;
+function askFinish(){const un=ex.ans.filter(a=>a===null).length,fl=ex.flag.size;
+  $("#confirmText").textContent=(un?`You have ${un} unanswered question${un>1?"s":""}. `:"All 30 questions answered. ")+(fl?`${fl} question${fl>1?"s are":" is"} flagged. `:"")+"Submit your answers now?";
+  $("#confirmBox").hidden=false;$("#confirmBox").scrollIntoView({behavior:"smooth",block:"center"})}
+$("#confirmNo").onclick=()=>{$("#confirmBox").hidden=true};
+$("#confirmYes").onclick=()=>finish(false);
+function finish(timeUp){
+  clearInterval(tick);if(!ex)return;
+  const res=ex.qs.map((q,i)=>({q,a:ex.ans[i],ok:ex.ans[i]===q.correct}));
+  const score=res.filter(r=>r.ok).length;const pass=score>=21;
+  examHist.push({score,date:Date.now()});store.set("w1-exams",examHist);paintProgress();histText();
+  const by={};res.forEach(r=>{by[r.q.t]=by[r.q.t]||[0,0];by[r.q.t][1]++;if(r.ok)by[r.q.t][0]++});
+  const R=$("#examResult");
+  R.innerHTML=`<div class="module-head"><span class="num">${timeUp?"Time is up":"Exam complete"}</span>
+   <div class="score-big">${score}<span style="font-size:.4em">/30</span></div>
+   <p class="verdict ${pass?"pass":"fail"}">${pass?"Pass":"Not yet a pass"}</p>
+   <p class="lede">${Math.round(score/30*100)}%. The pass mark is 70%, or 21 correct. ${pass?"Well done. Use the review below to tidy up any gaps before the real thing.":`You needed ${21-score} more. Focus on your weakest module below, then try again.`}</p></div>
+   <div class="panel"><h4>By module</h4>${Object.keys(QUOTA).filter(k=>by[k]).map(k=>`<div class="meter"><span>${TNAMES[k]} ${by[k][0]}/${by[k][1]}</span><div class="tr"><div class="fl ${by[k][0]/by[k][1]>=.7?"vine":""}" style="width:${by[k][0]/by[k][1]*100}%"></div></div></div>`).join("")}</div>
+   <p><button class="btn" id="retake">Take a new exam</button> &nbsp;<a class="btn ghost" href="#home">Back to the course</a></p>
+   <h3>Review your answers</h3>
+   ${res.map((r,i)=>`<div class="review-item"><p style="margin-bottom:4px"><span class="tick ${r.ok?"r":"w"}">${r.ok?"Correct":"Incorrect"}</span> &nbsp;<strong>${i+1}. ${esc(r.q.q)}</strong></p>
+     <p class="yours" style="margin:0">${r.a===null?"Not answered. ":r.ok?"":`Your answer: ${esc(r.q.opts[r.a])}. `}Correct answer: <strong>${esc(r.q.opts[r.q.correct])}</strong></p>
+     <p class="exp" style="margin:4px 0 0">${esc(r.q.exp)}</p></div>`).join("")}`;
+  $("#examRun").hidden=true;R.hidden=false;ex=null;window.scrollTo(0,0);
+  $("#retake").onclick=()=>$("#startExam").click();
+}
+
+/* ---------- start ---------- */
+paintProgress();route();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}
+</script>
+</body>
+</html>
