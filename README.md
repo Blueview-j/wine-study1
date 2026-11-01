@@ -2,6 +2,8 @@
 
 An interactive, installable study companion for the WSET Level 1 Award in Wines, with a 30-question mock exam. It works offline once installed.
 
+ https://blueview-j.github.io/wine-study1/
+
 An independent study aid, not produced or endorsed by the Wine & Spirit Education Trust.
 
 ## Files
